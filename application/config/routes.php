@@ -57,12 +57,12 @@ $route['translate_uri_dashes'] = FALSE;
 //application
 $route['production/dashboard'] = 'auth/dashboard';
 $route['production'] = 'auth';
-$route['production/logout'] = 'auth/logout';
-$route['production/login'] = 'auth';
-$route['production/change_password'] = 'auth/change_password';
 
 //user
+$route['production/logout'] = 'auth/logout';
+$route['production/login'] = 'auth';
 $route['production/forgot_password'] = 'auth/forgot_password';
+$route['production/change_password'] = 'auth/change_password';
 
 //admin - user
 $route['production/user'] = 'auth/user';
@@ -99,6 +99,14 @@ $route['production/product/inactive/(:any)'] = 'master/product_inactive/$1';
 
 //admin - shift
 $route['production/shift'] = 'master/shift';
+$route['production/shift/add'] = 'master/shift_create';
+$route['production/shift/edit/(:any)'] = 'master/shift_edit/$1';
+$route['production/shift/detail/(:any)'] = 'master/shift_edit/$1/0';
+$route['production/shift/active/(:any)'] = 'master/shift_activate/$1';
+$route['production/shift/inactive/(:any)'] = 'master/shift_inactive/$1';
+
+//ppic - schedule
+$route['production/schedule'] = 'ppic/schedule_today';
 $route['production/shift/add'] = 'master/shift_create';
 $route['production/shift/edit/(:any)'] = 'master/shift_edit/$1';
 $route['production/shift/detail/(:any)'] = 'master/shift_edit/$1/0';

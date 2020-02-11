@@ -198,6 +198,33 @@ function time_elapsed_string($datetime, $full = false)
 	return $string ? implode(', ', $string) . ' ago' : 'just now';
 }
 
+function time_future_string($datetime)
+{
+	// The event date
+	$eventdate = strtotime($datetime);
+
+// Today's date
+	$today = strtotime('now');
+
+// Tomorrow's date
+	$tomorrow = strtotime('tomorrow');
+
+// If event date is equal to today's date, show TODAY
+	if (date('m-d-Y', $today) == date('m-d-Y', $eventdate)) {
+		return 'Today';
+	}
+
+// If event date is equal to tomorrow's date, show TOMORROW
+	if (date('m-d-Y', $tomorrow) == date('m-d-Y', $eventdate)) {
+		return 'Tomorrow';
+	}
+
+// If event date is not equal to today's or tomorrow's date, print the date
+	if ((date('m-d-Y', $today) != date('m-d-Y', $eventdate)) && (date('m-d-Y', $tomorrow) != date('m-d-Y', $eventdate))) {
+		return date('M j', $eventdate);
+	}
+}
+
 function secondsToTime($inputSeconds)
 {
 

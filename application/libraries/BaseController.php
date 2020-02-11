@@ -27,8 +27,11 @@ class BaseController extends CI_Controller
 	protected $tbl_scheme = 'Scheme';
 	protected $tbl_shift = 'Shift';
 	protected $tbl_user = 'User';
+	protected $tbl_schedule = 'Schedule';
 	protected $tbl_scheme_detail = 'SchemeDetail';
 
+	protected $desc_today = 'Today';
+	protected $desc_history = 'History';
 	/**
 	 * Takes mixed data and optionally a status code, then creates the response
 	 *
