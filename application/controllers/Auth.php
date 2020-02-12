@@ -1127,4 +1127,11 @@ class Auth extends BaseController
 		return TRUE;
 	}
 
+	public function show404()
+	{
+		$this->set_global('Error', 'Error');
+		$this->loadViews("errors/custom/404", $this->global, NULL, NULL);
+
+	}
+
 }

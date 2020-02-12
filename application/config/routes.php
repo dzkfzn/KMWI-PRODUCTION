@@ -50,7 +50,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'portal';
-$route['404_override'] = 'master/show404';
+$route['404_override'] = 'auth/show404';
 $route['translate_uri_dashes'] = FALSE;
 
 /*********** USER DEFINED ROUTES *******************/
@@ -107,7 +107,11 @@ $route['production/shift/inactive/(:any)'] = 'master/shift_inactive/$1';
 
 //ppic - schedule
 $route['production/schedule'] = 'ppic/schedule_today';
-$route['production/shift/add'] = 'master/shift_create';
+$route['production/schedule/add/1'] = 'ppic/schedule_create/1';
+$route['production/schedule/add/2/(:any)/(:any)'] = 'ppic/schedule_create/2/$1/$2';
+$route['production/schedule/add/3/(:any)'] = 'ppic/schedule_create/3/$1';
+
+
 $route['production/shift/edit/(:any)'] = 'master/shift_edit/$1';
 $route['production/shift/detail/(:any)'] = 'master/shift_edit/$1/0';
 $route['production/shift/active/(:any)'] = 'master/shift_activate/$1';

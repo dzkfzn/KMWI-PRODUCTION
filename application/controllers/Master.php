@@ -810,7 +810,9 @@ class Master extends BaseController
 		foreach ($this->Master_model->any_select($this->sp_list, $this->tbl_station) as $row) {
 			$this->data['option_station'][$row->sta_id] = $row->sta_name . ' - ' . $row->sta_type;
 		}
+
 		$this->data['schema_detail'] = $this->Master_model->any_select($this->sp_list, $this->tbl_scheme_detail, array($id), TRUE);
+
 		foreach ($this->data['schema_detail'] as $row) {
 			$this->data['station_selected'][$row->sta_id] = $row->sta_id;
 		}

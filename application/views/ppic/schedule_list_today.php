@@ -16,7 +16,7 @@
 								<div class="places-buttons">
 									<div class="row">
 										<div class="col-md-12">
-											<a href="<?= base_url('production/schedule/add') ?>"
+											<a href="<?= base_url('production/schedule/add/1') ?>"
 											   class="btn btn-primary btn-round" onclick="clickAndDisable(this);">
 												<i class="material-icons">add</i>
 												<b>Add Data</b>
