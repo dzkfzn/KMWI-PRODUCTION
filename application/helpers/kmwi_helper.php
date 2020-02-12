@@ -250,17 +250,24 @@ function secondsToTime($inputSeconds)
 	// return the final array
 	$timeParts = array();
 	$obj = array(
-		'd' => (int)$days,
-		'h' => (int)$hours,
-		'm' => (int)$minutes,
-		's' => (int)$seconds,
+		'day' => (int)$days,
+		'hour' => (int)$hours,
+		'minute' => (int)$minutes,
+		'second' => (int)$seconds,
 	);
 	foreach ($obj as $name => $value) {
 		if ($value > 0) {
-			$timeParts[] = $value . $name;
+			$timeParts[] = $value . ' ' . $name;
 		}
 	}
 	return implode(' ', $timeParts);
+}
+
+function timeToSeconds($str_time)
+{
+	sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
+	$time_seconds = isset($hours) ? $hours * 3600 + $minutes * 60 + $seconds : $minutes * 60 + $seconds;
+	return $time_seconds;
 }
 
 
@@ -312,6 +319,14 @@ function print_beauty_status($deleted, $active_format = FALSE)
 	return '<span class="label label-' . $label . '">' . $text . '</span>';
 }
 
+function print_beauty_statusv2($text, $status)
+{
+	//0 = default - past
+	//1 = success - working in
+	//2 = warning - future
+	return '<span class="label label-' . $status . '">' . $text . '</span>';
+}
+
 
 function empty_object($obj)
 {
@@ -333,7 +348,7 @@ function is_null_station($station)
 
 function print_beauty_date($timestamp)
 {
-	return date("F jS, Y", strtotime($timestamp));
+	return date("j F Y", strtotime($timestamp));
 }
 
 function print_beauty_time($timestamp)
@@ -341,5 +356,112 @@ function print_beauty_time($timestamp)
 	return date('H:i', strtotime($timestamp));
 }
 
+function is_shift_pass_midnight($start_date, $end_date)
+{
+	$start = new DateTime($start_date);
+	$end = new DateTime($end_date);
 
+	//in case kalo shift malem contoh 18:00-02:00
+	if ($start > $end)
+		return TRUE;
+	return FALSE;
+
+}
+
+function is_now_time_between($start_date, $end_date)
+{
+	$now = new DateTime(date("H:i"));
+
+	$start = new DateTime($start_date);
+	$end = new DateTime($end_date);
+
+	//in case kalo shift malem contoh 18:00-02:00
+	if ($start > $end)
+		$end->modify('+1 day');
+
+//	$end = DateTime::createFromFormat('H:i', $end_date);
+	if ($start <= $now && $now <= $end) {
+		return TRUE;
+	}
+	return FALSE;
+}
+
+function is_time_before($start_shift)
+{
+	$now = new DateTime(date("H:i"));
+
+	$start = new DateTime($start_shift);
+//	$end = new DateTime($end_date);
+
+	//in case kalo shift malem contoh 18:00-02:00
+	if ($now < $start)
+		return TRUE;
+	return FALSE;
+}
+
+function is_now_date_same($datetime)
+{
+	$eventdate = strtotime($datetime);
+
+	$today = strtotime('now');
+	if (date('m-d-Y', $today) == date('m-d-Y', $eventdate)) {
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
+function pluralize($count, $text)
+{
+	return $count . (($count == 1) ? (" $text") : (" ${text}s"));
+}
+
+function ago($date, $time, $suffix_ovveride = FALSE, $prefix_ovveride = FALSE, $is_pass_night = FALSE)
+{
+//	$first_date = new DateTime("2020-02-12" . "17:03");
+	$date = new DateTime($date . $time);
+	if ($is_pass_night)
+		$date->modify('+1 day');
+
+//	$start = DateTime::createFromFormat('Y-m-d', "2020-02-22");
+//	$start = DateTime::createFromFormat('H:i', "19:00");
+
+	$interval = date_create('now')->diff($date);
+	$suffix = '';
+	$prefix = '';
+	if ($interval->invert)
+		$suffix = ($suffix_ovveride) ? $suffix_ovveride : ' ago';
+	else
+		$prefix = ($prefix_ovveride) ? $prefix_ovveride : 'in ';
+	if ($v = $interval->y >= 1)
+		return $prefix . pluralize($interval->y, 'year') . $suffix;
+	if ($v = $interval->m >= 1)
+		return $prefix . pluralize($interval->m, 'month') . $suffix;
+	if ($v = $interval->d >= 1)
+		return $prefix . pluralize($interval->d, 'day') . $suffix;
+	if ($v = $interval->h >= 1)
+		return $prefix . pluralize($interval->h, 'hour') . $suffix;
+	if ($v = $interval->i >= 1)
+		return $prefix . pluralize($interval->i, 'minute') . $suffix;
+	return $prefix . pluralize($interval->s, 'second') . $suffix;
+}
+
+
+//
+//function pluralize( $count, $text )
+//{
+//	return $count . ( ( $count == 1 ) ? ( " $text" ) : ( " ${text}s" ) );
+//}
+//
+//function ago( $datetime )
+//{
+//	$interval = date_create('now')->diff( $datetime );
+//	$suffix = ( $interval->invert ? ' ago' : '' );
+//	if ( $v = $interval->y >= 1 ) return pluralize( $interval->y, 'year' ) . $suffix;
+//	if ( $v = $interval->m >= 1 ) return pluralize( $interval->m, 'month' ) . $suffix;
+//	if ( $v = $interval->d >= 1 ) return pluralize( $interval->d, 'day' ) . $suffix;
+//	if ( $v = $interval->h >= 1 ) return pluralize( $interval->h, 'hour' ) . $suffix;
+//	if ( $v = $interval->i >= 1 ) return pluralize( $interval->i, 'minute' ) . $suffix;
+//	return pluralize( $interval->s, 'second' ) . $suffix;
+//}
 ?>

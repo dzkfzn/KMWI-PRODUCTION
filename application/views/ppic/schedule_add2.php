@@ -12,14 +12,16 @@
 					<div class="card-content">
 						<h4 class="card-title"><?= $gCardTitle ?></h4>
 						<div class="row">
-							<div class="col-sm-2 label-on-left">
+							<div class="col-sm-2 label-on-left"></div>
+							<div class="col-sm-7">
+								<?= $message; ?>
 
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-sm-2 label-on-left"></div>
 							<div class="col-sm-7">
-								<?= $message; ?>
+								<h3><?= $schema->sce_name ?></h3>
 
 							</div>
 						</div>
@@ -29,7 +31,7 @@
 							<div class="row">
 								<label
 									class="col-sm-2 label-on-left"><?php echo htmlspecialchars($station->sta_name . ' | ' . $station->sta_type, ENT_QUOTES, 'UTF-8'); ?>
-									</label>
+								</label>
 
 								<div class="col-sm-7">
 									<div class="form-group label-floating">
@@ -54,12 +56,7 @@
 								<div class="form-group">
 									<div class="row">
 										<div class="col-md-6 col-xs-6">
-
-											<a href="<?= base_url('production/schedule/add/1') ?>"
-											   class="btn btn-primary btn-fill btn-round btn-block">
-												previous
-											</a>
-
+											<a class="btn btn-primary btn-fill btn-round btn-block" href="<?= base_url('production/schedule') ?>">Cancel</a>
 										</div>
 										<div class="col-md-6 col-xs-6">
 											<button name="submit" type="submit"

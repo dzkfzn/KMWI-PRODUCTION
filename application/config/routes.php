@@ -110,6 +110,8 @@ $route['production/schedule'] = 'ppic/schedule_today';
 $route['production/schedule/add/1'] = 'ppic/schedule_create/1';
 $route['production/schedule/add/2/(:any)/(:any)'] = 'ppic/schedule_create/2/$1/$2';
 $route['production/schedule/add/3/(:any)'] = 'ppic/schedule_create/3/$1';
+$route['production/schedule/add/3/(:any)/(:any)'] = 'ppic/schedule_create_step3/$1/1';
+$route['production/schedule/inactive/(:any)'] = 'ppic/schedule_inactive/$1';
 
 
 $route['production/shift/edit/(:any)'] = 'master/shift_edit/$1';

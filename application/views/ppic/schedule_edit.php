@@ -6,7 +6,7 @@
 
 				<div class="card">
 					<div class="card-header card-header-icon" data-background-color="purple">
-						<i class="material-icons">add</i>
+						<i class="material-icons">edit</i>
 					</div>
 					<?php echo form_open('production/schedule/add/1', $form_attribute); ?>
 					<div class="card-content">
@@ -100,7 +100,8 @@
 								<div class="form-group">
 									<div class="row">
 										<div class="col-md-6 col-xs-6">
-											<a class="btn btn-primary btn-fill btn-round btn-block" href="<?= base_url('production/schedule') ?>">Cancel</a>
+											<input type="reset" class="btn btn-primary btn-fill btn-round btn-block"
+												   value="Clean Form"/>
 
 										</div>
 										<div class="col-md-6 col-xs-6">

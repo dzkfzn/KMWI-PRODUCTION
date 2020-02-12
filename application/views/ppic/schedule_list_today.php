@@ -41,6 +41,7 @@
 										<th>Schema</th>
 										<th>Product</th>
 										<th>Plan (Unit)</th>
+										<th>Status</th>
 										<th class="disabled-sorting text-right"><?php echo lang('index_action_th'); ?></th>
 									</tr>
 									</thead>
@@ -48,17 +49,52 @@
 									<?php foreach ($schedule_today as $schedule): ?>
 										<tr>
 											<td><?php echo htmlspecialchars($schedule->no, ENT_QUOTES, 'UTF-8'); ?></td>
-											<td><?php echo time_future_string(htmlspecialchars($schedule->sch_production_date, ENT_QUOTES, 'UTF-8')) ; ?></td>
+											<td><?php echo time_future_string(htmlspecialchars($schedule->sch_production_date, ENT_QUOTES, 'UTF-8')); ?></td>
 											<td><?php echo htmlspecialchars($schedule->sif_name, ENT_QUOTES, 'UTF-8'); ?></td>
 											<td><?php echo htmlspecialchars($schedule->sce_name, ENT_QUOTES, 'UTF-8'); ?></td>
 											<td><?php echo htmlspecialchars($schedule->pro_name, ENT_QUOTES, 'UTF-8'); ?></td>
 											<td><?php echo htmlspecialchars($schedule->sch_plan, ENT_QUOTES, 'UTF-8'); ?></td>
-											<td class="text-right">
-												<?= anchor("production/schedule/detail/" . $schedule->sch_id, '<i class="material-icons">remove_red_eye</i>', 'class="btn btn-simple btn-primary btn-icon" data-toggle="tooltip" data-placement="top" title="Detail" onclick="clickAndDisable(this);"') ?>
-												<?= anchor("production/schedule/edit/" . $schedule->sch_id, '<i class="material-icons">edit</i>', 'class="btn btn-simple btn-primary btn-icon edit" data-toggle="tooltip" data-placement="top" title="Edit" onclick="clickAndDisable(this);"') ?>
-												<!--0 => active => show toogle on, action => inactive-->
-												<!--1 => active => show toogle off, action => active-->
-											</td>
+
+											<!--if true then compare with start date else end date-->
+											<?php
+											$is_production_date_today = is_now_date_same($schedule->sch_production_date);
+											$is_time_between_shift = is_now_time_between($schedule->sif_start_date, $schedule->sif_end_date);
+											$is_pass_night = is_shift_pass_midnight($schedule->sif_start_date, $schedule->sif_end_date);
+											$is_time_before_shift = is_time_before($schedule->sif_start_date);
+
+											?>
+											<?php if ($is_production_date_today): ?>
+												<?php if ($is_time_between_shift): ?>
+													<?php $time = ago($schedule->sch_production_date, $schedule->sif_end_date, FALSE, FALSE, $is_pass_night); ?>
+													<td><?= print_beauty_statusv2('working ' . $time . ' Left', 'success') ?></td>
+													<td class="text-right">
+														<?= anchor("production/schedule/detail/" . $schedule->sch_id, '<i class="material-icons">remove_red_eye</i>', 'class="btn btn-simple btn-primary btn-icon" data-toggle="tooltip" data-placement="top" title="Detail" onclick="clickAndDisable(this);"') ?>
+													</td>
+												<?php elseif ($is_time_before_shift): ?>
+													<?php $time = ago($schedule->sch_production_date, $schedule->sif_start_date, FALSE, FALSE); ?>
+													<td><?= print_beauty_statusv2('to be worked ' . $time, 'primary') ?></td>
+													<td class="text-right">
+														<?= anchor("production/schedule/detail/" . $schedule->sch_id, '<i class="material-icons">remove_red_eye</i>', 'class="btn btn-simple btn-primary btn-icon" data-toggle="tooltip" data-placement="top" title="Detail" onclick="clickAndDisable(this);"') ?>
+														<?= anchor("production/schedule/inactive/" . $schedule->sch_id, '<i class="material-icons">delete</i>', 'class="btn btn-simple btn-primary btn-icon edit" data-toggle="tooltip" data-placement="top" title="Remove" onclick="clickAndDisable(this);"') ?>
+													</td>
+												<?php else : ?>
+													<?php $time = ago($schedule->sch_production_date, $schedule->sif_end_date, FALSE, FALSE, $is_pass_night); ?>
+													<td><?= print_beauty_statusv2('finished ' . $time, 'default') ?></td>
+													<td class="text-right">
+														<?= anchor("production/schedule/detail/" . $schedule->sch_id, '<i class="material-icons">remove_red_eye</i>', 'class="btn btn-simple btn-primary btn-icon" data-toggle="tooltip" data-placement="top" title="Detail" onclick="clickAndDisable(this);"') ?>
+													</td>
+												<?php endif; ?>
+
+
+											<?php else: ?>
+												<?php $time = ago($schedule->sch_production_date, $schedule->sif_start_date); ?>
+												<td><?= print_beauty_statusv2('to be worked ' . $time, 'primary') ?></td>
+												<td class="text-right">
+													<?= anchor("production/schedule/detail/" . $schedule->sch_id, '<i class="material-icons">remove_red_eye</i>', 'class="btn btn-simple btn-primary btn-icon" data-toggle="tooltip" data-placement="top" title="Detail" onclick="clickAndDisable(this);"') ?>
+													<?= anchor("production/schedule/inactive/" . $schedule->sch_id, '<i class="material-icons">delete</i>', 'class="btn btn-simple btn-primary btn-icon edit" data-toggle="tooltip" data-placement="top" title="Remove" onclick="clickAndDisable(this);"') ?>
+												</td>
+
+											<?php endif; ?>
 
 
 										</tr>
@@ -86,18 +122,18 @@
 									<div class="col-md-6 col-md-offset-3">
 										<div class="row">
 											<div class="col-md-6 col-sm-6 col-xs-6">
-													<a href="<?= base_url('production/schedule/add/1') ?>"
-													   class="btn btn-primary btn-round btn-block">
-														<i class="material-icons">add</i>
-														<b>Add a Schedule</b>
-													</a>
+												<a href="<?= base_url('production/schedule/add/1') ?>"
+												   class="btn btn-primary btn-round btn-block">
+													<i class="material-icons">add</i>
+													<b>Add a Schedule</b>
+												</a>
 											</div>
 											<div class="col-md-6 col-sm-6 col-xs-6">
-													<a href="<?= base_url('production/schedule') ?>"
-													   class="btn btn-primary btn-round btn-block">
-														<i class="material-icons">update</i>
-														<b>History View</b>
-													</a>
+												<a href="<?= base_url('production/schedule') ?>"
+												   class="btn btn-primary btn-round btn-block">
+													<i class="material-icons">update</i>
+													<b>History View</b>
+												</a>
 											</div>
 										</div>
 

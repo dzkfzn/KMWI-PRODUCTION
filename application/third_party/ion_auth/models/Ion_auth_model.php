@@ -2280,7 +2280,7 @@ class Ion_auth_model extends CI_Model
 	{
 		$_output = '';
 		foreach ($this->errors as $error) {
-			$errorLang = $this->lang->line($error) ? $this->lang->line($error) : '##' . $error . '##';
+			$errorLang = $this->lang->line($error) ? $this->lang->line($error) : $error ;
 			$_output .= $this->error_start_delimiter . $errorLang . $this->error_end_delimiter;
 		}
 

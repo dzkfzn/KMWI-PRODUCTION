@@ -14,13 +14,16 @@ class BaseController extends CI_Controller
 	protected $name = '';
 	protected $roleText = '';
 	protected $global = array();
+
 	protected $sp_insert = 'create';
 	protected $sp_update = 'edit';
 	protected $sp_delete = 'delete';
 	protected $sp_active = 'setActive';
 	protected $sp_inactive = 'setInactive';
 	protected $sp_list = 'getList';
+	protected $sp_list_active = 'getListActive';
 	protected $sp_detail = 'getDetail';
+	protected $sp_check = 'check';
 
 	protected $tbl_product = 'Product';
 	protected $tbl_station = 'Station';

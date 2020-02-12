@@ -179,7 +179,7 @@ class Master extends BaseController
 	{
 		$this->form_validation->set_rules('frame_uid', 'Frame UID', 'required|min_length[17]|max_length[17]|trim');
 		$this->form_validation->set_rules('engine_uid', 'Engine UID', 'required|min_length[17]|max_length[17]|trim');
-		$this->form_validation->set_rules('name', ' Name', 'required|trim|max_length[20]|is_unique[prd_msstation.sta_name]');
+		$this->form_validation->set_rules('name', ' Name', 'required|trim|max_length[20]');
 		$this->form_validation->set_rules('type', 'Type', 'trim|max_length[20]');
 		$this->form_validation->set_rules('desc', 'Description', 'trim|max_length[1600]');
 
@@ -342,7 +342,7 @@ class Master extends BaseController
 		} else {
 			$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
-			foreach ($this->Master_model->any_select($this->sp_list, $this->tbl_station) as $row) {
+			foreach ($this->Master_model->any_select($this->sp_list_active, $this->tbl_station) as $row) {
 				$this->data['option_station'][$row->sta_id] = $row->sta_name . ' - ' . $row->sta_type;
 			}
 			$this->data['station_extra'] =
@@ -807,7 +807,7 @@ class Master extends BaseController
 			);
 		}
 
-		foreach ($this->Master_model->any_select($this->sp_list, $this->tbl_station) as $row) {
+		foreach ($this->Master_model->any_select($this->sp_list_active, $this->tbl_station) as $row) {
 			$this->data['option_station'][$row->sta_id] = $row->sta_name . ' - ' . $row->sta_type;
 		}
 
