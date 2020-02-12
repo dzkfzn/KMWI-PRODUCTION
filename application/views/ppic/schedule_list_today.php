@@ -86,14 +86,14 @@
 									<div class="col-md-6 col-md-offset-3">
 										<div class="row">
 											<div class="col-md-6 col-sm-6 col-xs-6">
-													<a href="<?= base_url('production/schedule/add') ?>"
+													<a href="<?= base_url('production/schedule/add/1') ?>"
 													   class="btn btn-primary btn-round btn-block">
 														<i class="material-icons">add</i>
 														<b>Add a Schedule</b>
 													</a>
 											</div>
 											<div class="col-md-6 col-sm-6 col-xs-6">
-													<a href="<?= base_url('production/schedule/add') ?>"
+													<a href="<?= base_url('production/schedule') ?>"
 													   class="btn btn-primary btn-round btn-block">
 														<i class="material-icons">update</i>
 														<b>History View</b>

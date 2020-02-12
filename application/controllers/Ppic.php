@@ -91,7 +91,7 @@ class Ppic extends BaseController
 		if ($this->form_validation->run() === TRUE && $this->Master_model->any_exec($data, $this->sp_insert, $this->tbl_schedule)) {
 			{
 				$token = bin2hex(random_bytes(40 / 2));
-				$this->session->set_flashdata('token_step1', $token);
+				$this->session->set_userdata('token_schedule1', $token);
 				redirect('production/schedule/add/2/' . $id . '/' . $scheme, 'refresh');
 			}
 		} else {
@@ -131,13 +131,6 @@ class Ppic extends BaseController
 				'required' => TRUE,
 				'value' => $this->form_validation->set_value('plan'),
 			);
-			$this->data['plan'] = array(
-				'name' => 'plan',
-				'class' => 'form-control',
-				'type' => 'number',
-				'required' => TRUE,
-				'value' => $this->form_validation->set_value('plan'),
-			);
 
 			$this->data['form_attribute'] = array(
 				'id' => 'FormValidation',
@@ -152,54 +145,129 @@ class Ppic extends BaseController
 		}
 	}
 
+//	public function schedule_edit_step1($id){
+//		if (!$this->is_any_verified($id, $this->tbl_schedule))
+//			return;
+//		$schedule = $this->Master_model->any_select($this->sp_detail, $this->tbl_schedule, array($id));
+//
+////		if (!$this->session->has_userdata('token_add_schedule'))
+//
+//
+//		$this->form_validation->set_rules('pro_date', 'Production Date', 'trim|required|callback_is_greater_today');
+//		$this->form_validation->set_rules('shift', ' Shift', 'required|trim');
+//		$this->form_validation->set_rules('product', 'Product', 'trim|required');
+//		$this->form_validation->set_rules('scheme', 'Schema', 'trim|required');
+//		$this->form_validation->set_rules('plan', 'Plan', 'trim|required|is_natural');
+//
+//
+//		if ($this->form_validation->run() === TRUE) {
+//			$pro_date = $this->input->post('pro_date');
+//			$shift = $this->input->post('shift');
+//			$product = $this->input->post('product');
+//			$scheme = $this->input->post('scheme');
+//			$plan = $this->input->post('plan');;
+//			$creadate = date('m/d/Y h:i:s a', time());
+//			$creaby = $this->session->userdata('username');
+//			$data = array($id, $shift, $scheme, $product, $pro_date, $plan, $creaby, $creadate);
+//		}
+//
+//		if ($this->form_validation->run() === TRUE && $this->Master_model->any_exec($data, $this->sp_insert, $this->tbl_schedule)) {
+//			{
+//				$token = bin2hex(random_bytes(40 / 2));
+//				$this->session->set_userdata('token_add_schedule', $token);
+//				redirect('production/schedule/add/2/' . $id . '/' . $scheme, 'refresh');
+//			}
+//		} else {
+//			$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+//
+//			foreach ($this->Master_model->any_select($this->sp_list, $this->tbl_shift) as $row) {
+//				$this->data['option_shift'][$row->sif_id] = $row->sif_name . ' (' . print_beauty_time($row->sif_start_date) . ' - ' . print_beauty_time($row->sif_end_date) . ')';
+//			}
+//			foreach ($this->Master_model->any_select($this->sp_list, $this->tbl_product) as $row) {
+//				$this->data['option_product'][$row->pro_id] = $row->pro_name . ' - ' . $row->pro_type;
+//			}
+//			foreach ($this->Master_model->any_select($this->sp_list, $this->tbl_scheme) as $row) {
+//				$this->data['option_scheme'][$row->sce_id] = $row->sce_name;
+//			}
+//
+//			$this->data['dropdown_extra'] =
+//				'class="selectpicker"
+//				 data-style="select-with-transition"
+//				 title="Choose"
+//				 data-size="7"
+//				 ';
+//
+//			$this->data['pro_date'] = array(
+//				'name' => 'pro_date',
+//				'id' => 'pro_date',
+//				'class' => 'form-control datepicker',
+//				'type' => 'text',
+//				'maxLength' => 10,
+//				'required' => TRUE,
+//				'value' => $this->form_validation->set_value('pro_date'),
+//			);
+//			$this->data['plan'] = array(
+//				'name' => 'plan',
+//				'id' => 'plan',
+//				'class' => 'form-control',
+//				'type' => 'number',
+//				'required' => TRUE,
+//				'value' => $this->form_validation->set_value('plan'),
+//			);
+//			$this->data['plan'] = array(
+//				'name' => 'plan',
+//				'class' => 'form-control',
+//				'type' => 'number',
+//				'required' => TRUE,
+//				'value' => $this->form_validation->set_value('plan'),
+//			);
+//
+//			$this->data['form_attribute'] = array(
+//				'id' => 'FormValidation',
+//				'class' => 'form-horizontal'
+//			);
+//
+//			$this->global['gPageTitle'] = 'PPIC | Schedule';
+//			$this->global['gContentTitle'] = 'Manage Schedule';
+//			$this->global['gCardTitle'] = 'Add Schedule';
+//			$this->loadViews("ppic/schedule_add", $this->global, $this->data, NULL);
+//
+//		}
+//	}
+
 	public function schedule_create_step2($id = NULL, $id_schema = NULL)
 	{
-//		if (!$this->is_any_verified($id, $this->tbl_schedule) || !$this->is_any_verified($id_schema, $this->tbl_scheme))
-//			return;
-//		if (!$this->session->flashdata('token_add'))
-//			redirect('production/schedule', 'refresh');
+		if (!$this->is_any_verified($id, $this->tbl_schedule) || !$this->is_any_verified($id_schema, $this->tbl_scheme))
+			return;
 
-		$this->form_validation->set_rules('station[]', 'Plan', 'trim|required|is_natural');
-		$stations = $this->Master_model->any_select($this->sp_list, $this->tbl_scheme_detail, array($id_schema), TRUE);
+		if (!$this->session->has_userdata('token_schedule1'))
+			show_error('You must input from beginning.');
+
+		$this->form_validation->set_rules('cycle_time[]', 'Cycle Time', 'trim|required|max_length[8]');
+		$this->data['stations'] = $this->Master_model->any_select($this->sp_list, $this->tbl_scheme_detail, array($id_schema), TRUE);
 
 		if ($this->form_validation->run() === TRUE) {
-			$id = $this->uuid->v4();
-			$pro_date = $this->input->post('pro_date');
-			$shift = $this->input->post('shift');
-			$product = $this->input->post('product');
-			$scheme = $this->input->post('scheme');
-			$plan = $this->input->post('plan');;
-			$creadate = date('m/d/Y h:i:s a', time());
-			$creaby = $this->session->userdata('username');
-			$data = array($id, $shift, $scheme, $product, $pro_date, $plan, $creaby, $creadate);
+			$this->session->unset_userdata('token_schedule1');
+			$cycle_time = $this->input->post('cycle_time');
+
+			$i = 0;
+			foreach ($this->data['stations'] as $row) {
+				$this->Master_model->any_exec(array($this->uuid->v4(), $id, $row->sta_id, $cycle_time[$i]), $this->sp_insert, $this->tbl_production);
+				$i++;
+			}
+			$token = bin2hex(random_bytes(40 / 2));
+			$this->session->set_userdata('token_schedule2', $token);
+			redirect('production/schedule/add/3/' . $id, 'refresh');
 		} else {
 			$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
-
-
-			$this->data['pro_date'] = array(
-				'name' => 'pro_date',
-				'id' => 'pro_date',
-				'class' => 'form-control datepicker',
+			$this->data['cycle_time'] = array(
+				'name' => 'cycle_time[]',
+				'id' => 'cycle_time',
+				'class' => 'form-control timepickersecond',
 				'type' => 'text',
-				'maxLength' => 10,
-				'required' => TRUE,
-				'value' => $this->form_validation->set_value('pro_date'),
-			);
-			$this->data['plan'] = array(
-				'name' => 'plan',
-				'id' => 'plan',
-				'class' => 'form-control',
-				'type' => 'number',
-				'required' => TRUE,
-				'value' => $this->form_validation->set_value('plan'),
-			);
-			$this->data['plan'] = array(
-				'name' => 'plan',
-				'class' => 'form-control',
-				'type' => 'number',
-				'required' => TRUE,
-				'value' => $this->form_validation->set_value('plan'),
+				'required' => 'required',
+				'maxLength' => 8
 			);
 
 			$this->data['form_attribute'] = array(
@@ -209,7 +277,7 @@ class Ppic extends BaseController
 
 			$this->global['gPageTitle'] = 'PPIC | Schedule';
 			$this->global['gContentTitle'] = 'Manage Schedule';
-			$this->global['gCardTitle'] = 'Add Schedule';
+			$this->global['gCardTitle'] = 'Add Cycle Time Each Station';
 			$this->loadViews("ppic/schedule_add2", $this->global, $this->data, NULL);
 
 		}
@@ -217,6 +285,86 @@ class Ppic extends BaseController
 
 	public function schedule_create_step3($id)
 	{
+
+		if (!$this->is_any_verified($id, $this->tbl_schedule))
+			return;
+
+		if (!$this->session->has_userdata('token_schedule2'))
+			show_error('You must input from beginning.');
+
+		$this->data['productions'] = $this->Master_model->any_select($this->sp_list, $this->tbl_production, array($id), TRUE);
+		$this->data['schedule'] = $this->Master_model->any_select($this->sp_detail, $this->tbl_schedule, array($id));
+
+		if ($this->form_validation->run() === TRUE) {
+
+			$this->Master_model->any_exec(array($this->uuid->v4(), $id, $row->sta_id, $cycle_time[$i]), $this->sp_insert, $this->tbl_production);
+			$this->session->unset_userdata('token_schedule2');
+			redirect('production/schedule/add/3/' . $id, 'refresh');
+		} else {
+			$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+
+			$this->data['cycle_time'] = array(
+				'name' => '',
+				'id' => 'cycle_time',
+				'type' => 'text',
+				'class' => 'form-control',
+				'readonly' => 'readonly',
+				'required' => 'required',
+			);
+
+			$this->data['pro_date'] = array(
+				'name' => 'pro_date',
+				'id' => 'pro_date',
+				'class' => 'form-control',
+				'readonly' => 'readonly',
+				'required' => TRUE,
+				'value' => $this->form_validation->set_value('pro_date', $this->data['schedule']->sch_production_date),
+			);
+			$this->data['plan'] = array(
+				'name' => 'plan',
+				'id' => 'plan',
+				'readonly' => 'readonly',
+				'class' => 'form-control',
+				'required' => TRUE,
+				'value' => $this->form_validation->set_value('plan', $this->data['schedule']->sch_plan),
+			);
+			$this->data['shift'] = array(
+				'name' => 'shift',
+				'id' => 'shift',
+				'readonly' => 'readonly',
+				'class' => 'form-control',
+				'required' => TRUE,
+				'value' => $this->form_validation->set_value('shift', $this->data['schedule']->sif_name),
+			);
+			$this->data['product'] = array(
+				'name' => 'product',
+				'id' => 'product',
+				'readonly' => 'readonly',
+				'class' => 'form-control',
+				'required' => TRUE,
+				'value' => $this->form_validation->set_value('product', $this->data['schedule']->pro_name),
+			);
+			$this->data['scheme'] = array(
+				'name' => 'scheme',
+				'id' => 'scheme',
+				'readonly' => 'readonly',
+				'class' => 'form-control',
+				'required' => TRUE,
+				'value' => $this->form_validation->set_value('scheme', $this->data['schedule']->sce_name),
+			);
+
+			$this->data['form_attribute'] = array(
+				'id' => 'FormValidation',
+				'class' => 'form-horizontal'
+			);
+
+			$this->global['gPageTitle'] = 'PPIC | Schedule';
+			$this->global['gContentTitle'] = 'Manage Schedule';
+			$this->global['gCardTitle'] = 'Add Cycle Time Each Station';
+			$this->loadViews("ppic/schedule_add3", $this->global, $this->data, NULL);
+
+		}
 
 	}
 

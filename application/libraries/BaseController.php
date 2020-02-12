@@ -29,6 +29,7 @@ class BaseController extends CI_Controller
 	protected $tbl_user = 'User';
 	protected $tbl_schedule = 'Schedule';
 	protected $tbl_scheme_detail = 'SchemeDetail';
+	protected $tbl_production = 'Production';
 
 	protected $desc_today = 'Today';
 	protected $desc_history = 'History';

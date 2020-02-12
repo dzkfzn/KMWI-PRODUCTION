@@ -108,8 +108,7 @@
 											<button name="submit" type="submit"
 													class="btn btn-primary btn-fill btn-block btn-round"
 													disabled="disabled"
-													onclick="clickAndDisable(this);">add
-												Schedule
+													onclick="clickAndDisable(this);">Next
 											</button>
 										</div>
 									</div>
