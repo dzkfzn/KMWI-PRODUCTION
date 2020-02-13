@@ -112,6 +112,7 @@ $route['production/schedule/add/2/(:any)/(:any)'] = 'ppic/schedule_create/2/$1/$
 $route['production/schedule/add/3/(:any)'] = 'ppic/schedule_create/3/$1';
 $route['production/schedule/add/3/(:any)/(:any)'] = 'ppic/schedule_create_step3/$1/1';
 $route['production/schedule/inactive/(:any)'] = 'ppic/schedule_inactive/$1';
+$route['production/schedule/detail/(:any)'] = 'ppic/schedule_detail/$1';
 
 
 $route['production/shift/edit/(:any)'] = 'master/shift_edit/$1';

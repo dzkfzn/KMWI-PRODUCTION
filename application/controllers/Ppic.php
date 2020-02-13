@@ -230,7 +230,7 @@ class Ppic extends BaseController
 
 
 			$this->data['cycle_time'] = array(
-				'name' => '',
+				'name' => 'cycle_time[]',
 				'id' => 'cycle_time',
 				'type' => 'text',
 				'class' => 'form-control',
@@ -293,9 +293,6 @@ class Ppic extends BaseController
 
 	}
 
-	public function schedule_detail($id){
-		
-	}
 
 	public function schedule_create($step, $id = NULL, $id_schema = NULL)
 	{
@@ -310,6 +307,186 @@ class Ppic extends BaseController
 
 	}
 
+	public function schedule_generate_status($prod_date, $start_date, $end_date)
+	{
+		$is_production_date_today = is_now_date_same($prod_date);
+		$is_time_between_shift = is_now_time_between($start_date, $end_date);
+		$is_pass_night = is_shift_pass_midnight($start_date, $end_date);
+		$is_time_before_shift = is_time_before($start_date);
+		if ($is_production_date_today) {
+			if ($is_time_between_shift) {
+				$time = ago($prod_date, $end_date, FALSE, FALSE, $is_pass_night);
+				return ('working ' . $time . ' Left');
+			} else if ($is_time_before_shift) {
+				$time = ago($prod_date, $start_date);
+				return ('to be worked ' . $time);
+			} else {
+				$time = ago($prod_date, $end_date, FALSE, FALSE, $is_pass_night);
+				return ('finished ' . $time);
+			}
+		} else {
+			$time = ago($prod_date, $start_date);
+			return ('to be worked ' . $time);
+		}
+
+	}
+
+	public function schedule_detail($id)
+	{
+		if (!$this->is_any_verified($id, $this->tbl_schedule))
+			return;
+
+		$this->data['productions'] = $this->Master_model->any_select($this->sp_list, $this->tbl_production, array($id), TRUE);
+		$this->data['schedule'] = $this->Master_model->any_select($this->sp_detail, $this->tbl_schedule, array($id));
+		$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+		$this->data['form_attribute'] = array(
+			'id' => 'FormValidation',
+			'class' => 'form-horizontal'
+		);
+		$this->set_global('Admin | Manage Master - Schedule', 'Manage Master Data Schedule', 'Detail Schedule');
+
+		$this->loadViews("ppic/schedule_detail", $this->global, $this->data, NULL);
+
+	}
+
+	public function scheme_edit($id, $is_editable = TRUE)
+	{
+
+		if (!$this->is_any_verified($id, $this->tbl_scheme)) return;
+		$scheme = $this->Master_model->any_select($this->sp_detail, $this->tbl_scheme, array($id));
+
+
+		// validate form input
+		$this->form_validation->set_rules('name', ' Name', 'required|trim|max_length[36]');
+		$this->form_validation->set_rules('output', 'output', 'trim|max_length[36]');
+
+		if (isset($_POST) && !empty($_POST)) {
+			// do we have a valid request?
+			if ($id != $this->input->post('id')) {
+				show_error($this->lang->line('error_csrf'));
+			}
+
+			if ($this->form_validation->run() === TRUE) {
+
+				$data = array(
+					$id,
+					$this->input->post('name'),
+					$this->input->post('output'),
+					$creaby = $this->session->userdata('username'),
+				);
+				$station = $this->input->post('station');
+				// check to see if we are updating the user
+				if ($this->Master_model->any_exec($data, $this->sp_update, $this->tbl_scheme)) {
+					$this->Master_model->any_exec(array($id), $this->sp_delete, $this->tbl_scheme_detail);
+					foreach ($station as $key => $value) {
+						$this->Master_model->any_exec(array($this->uuid->v4(), $value, $id), $this->sp_insert, $this->tbl_scheme_detail);
+					}
+					// redirect them back to the admin page if admin, or to the base url if non admin
+					$this->ion_auth->set_message('scheme Updated Succesfully');
+					$this->session->set_flashdata('message', $this->ion_auth->messages());
+					redirect('production/scheme');
+				} else {
+					// redirect them back to the admin page if admin, or to the base url if non admin
+					$this->ion_auth->set_message('Failed to Update');
+					$this->session->set_flashdata('message', $this->ion_auth->messages());
+					redirect('production/scheme');
+				}
+
+			}
+		}
+
+		// set the flash data error message if there is one
+		$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+
+		if ($is_editable) {
+			$this->set_global('Admin | Manage Master - scheme', 'Manage Master Data scheme', 'Edit scheme');
+			$is_disabled = 'enabled';
+		} else {
+			$is_disabled = 'disabled';
+			$this->set_global('Admin | Manage Master - scheme', 'Manage Master Data scheme', 'Detail scheme');
+			$this->data['creaby'] = array(
+				'class' => 'form-control',
+				'disabled' => 'disabled',
+				'output' => 'text',
+				'value' => $this->form_validation->set_value('creaby', $scheme->sce_creaby)
+			);
+			$this->data['creadate'] = array(
+				'class' => 'form-control',
+				'disabled' => 'disabled',
+				'output' => 'text',
+				'value' => $this->form_validation->set_value('creadate', time_elapsed_string($scheme->sce_creadate) . ' (' . print_beauty_date($scheme->sce_creadate) . ')')
+			);
+			$this->data['modiby'] = array(
+				'class' => 'form-control',
+				'disabled' => 'disabled',
+				'output' => 'text',
+				'value' => $this->form_validation->set_value('modiby', is_null_modiby($scheme->sce_modiby))
+			);
+			$this->data['modidate'] = array(
+				'class' => 'form-control',
+				'disabled' => 'disabled',
+				'output' => 'text',
+				'value' => $this->form_validation->set_value('modidate', is_null_modiby($scheme->sce_modidate, TRUE) . ' (' . print_beauty_date($scheme->sce_modidate) . ')')
+			);
+			$this->data['status'] = array(
+				'class' => 'form-control',
+				'disabled' => 'disabled',
+				'output' => 'text',
+				'value' => $this->form_validation->set_value('status', ($scheme->sce_is_deleted) ? 'Inactive' : 'Active')
+			);
+		}
+
+		foreach ($this->Master_model->any_select($this->sp_list_active, $this->tbl_station) as $row) {
+			$this->data['option_station'][$row->sta_id] = $row->sta_name . ' - ' . $row->sta_type;
+		}
+
+		$this->data['schema_detail'] = $this->Master_model->any_select($this->sp_list, $this->tbl_scheme_detail, array($id), TRUE);
+
+		foreach ($this->data['schema_detail'] as $row) {
+			$this->data['station_selected'][$row->sta_id] = $row->sta_id;
+		}
+		$this->data['station_extra'] =
+			'class="selectpicker" 
+				 data-style="select-with-transition"
+				 title="Choose Station"
+				 data-size="7"
+				 id="station"
+				 ';
+
+
+		// pass the user to the view
+		$this->data['scheme'] = $scheme;
+		$this->data['name'] = array(
+			'name' => 'name',
+			'id' => 'name',
+			$is_disabled => $is_disabled,
+			'class' => 'form-control',
+			'output' => 'text',
+			'required' => TRUE,
+			'value' => $this->form_validation->set_value('name', $scheme->sce_name)
+		);
+		$this->data['output'] = array(
+			'name' => 'output',
+			'id' => 'output',
+			$is_disabled => $is_disabled,
+			'class' => 'form-control',
+			'output' => 'text',
+			'value' => $this->form_validation->set_value('output', $scheme->sce_output)
+		);
+
+		$this->data['form_attribute'] = array(
+			'id' => 'FormValidation',
+			'class' => 'form-horizontal'
+		);
+
+		if ($is_editable)
+			$this->loadViews("admin/scheme_edit", $this->global, $this->data, NULL);
+		else
+			$this->loadViews("admin/scheme_detail", $this->global, $this->data, NULL);
+
+	}
 
 	public function schedule_inactive($id)
 	{
