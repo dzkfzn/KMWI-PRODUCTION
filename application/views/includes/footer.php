@@ -1,4 +1,3 @@
-
 <footer class="footer">
 	<div class="container-fluid">
 		<p class="copyright pull-right">
@@ -12,13 +11,16 @@
 
 </div>
 </div>
+
+
 </body>
+
 <script type="text/javascript">
 	document.onreadystatechange = function () {
 		var state = document.readyState
 		if (state == 'complete') {
 			document.getElementById('interactive');
-			document.getElementById('load').style.visibility="hidden";
+			document.getElementById('load').style.visibility = "hidden";
 		}
 	}
 </script>
@@ -29,7 +31,7 @@
 <script src="<?= base_url(); ?>assets/js/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
 
 <!-- Include a polyfill for ES6 Promises (optional) for IE11, UC Browser and Android browser support SweetAlert -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
+<script src="<?= base_url(); ?>assets/js/core.js"></script>
 
 <!-- Library for adding dinamically elements -->
 <script src="<?= base_url(); ?>assets/js/arrive.min.js" type="text/javascript"></script>
@@ -68,7 +70,7 @@
 <script src="<?= base_url(); ?>assets/js/jquery.datatables.js"></script>
 
 <!-- Sweet Alert 2 plugin, full documentation here: https://limonte.github.io/sweetalert2/ -->
-<script src="<?= base_url(); ?>assets/js/sweetalert2.js"></script>
+<script src="<?= base_url(); ?>assets/js/sweetalert.js"></script>
 
 <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
 <script src="<?= base_url(); ?>assets/js/jasny-bootstrap.min.js"></script>
@@ -85,6 +87,51 @@
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
 <script src="<?= base_url(); ?>assets/js/demo.js"></script>
 
+<script type="text/javascript">
+	$('.removealert').on("click", function (e) {
+		e.preventDefault();
+		var url = $(this).attr('href');
+		swal({
+				title: "Are you sure?",
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: '#DD6B55',
+				confirmButtonText: 'Yes, Remove!',
+				cancelButtonText: "No, Cancel!",
+				confirmButtonClass: "btn-danger",
+				closeOnConfirm: false,
+				closeOnCancel: false
+			},
+			function (isConfirm) {
+				if (isConfirm) {
+					swal("Deleted!", "Schedule has been deleted!", "success");
+					// setTimeout(function(){ window.location.replace = url; }, 2000);
+					window.setTimeout(function () {
+						window.location.replace(url);
+					}, 1000);
+					// window.location.replace(url);
+				} else {
+					swal("Cancelled", "", "error");
+				}
+			});
+	});
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		var interval = setInterval(function () {
+			var momentNow = moment();
+			$('#date-part').html(momentNow.format('YYYY MMMM DD') + ' '
+				+ momentNow.format('dddd')
+					.substring(0, 3).toUpperCase());
+			$('#time-part').html(momentNow.format('A hh:mm:ss'));
+		}, 100);
+
+		$('#stop-interval').on('click', function () {
+			clearInterval(interval);
+		});
+	});
+</script>
 
 <script type="text/javascript">
 	$(document).ready(function () {
@@ -96,11 +143,11 @@
 
 		$('#datatables').DataTable({
 			"pagingType": "full_numbers",
-			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+			"lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
 			responsive: true,
 			language: {
 				search: "_INPUT_",
-				searchPlaceholder: "Search records",
+				searchPlaceholder: "Search",
 			}
 
 		});
@@ -113,7 +160,7 @@
 <script>
 	function clickAndDisable(link) {
 		// disable subsequent clicks
-		link.onclick = function(event) {
+		link.onclick = function (event) {
 			event.preventDefault();
 		}
 	}
@@ -129,6 +176,19 @@
 			}
 		});
 
+	});
+</script>
+
+<script type="text/javascript">
+	var timestamp = '<?=date("F j, Y, g:i a");?>';
+
+	function updateTime() {
+		$('#time').html(Date(timestamp));
+		timestamp++;
+	}
+
+	$(function () {
+		setInterval(updateTime, 1000);
 	});
 </script>
 

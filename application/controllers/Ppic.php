@@ -30,7 +30,7 @@ class Ppic extends BaseController
 	public function is_any_verified($id, $table)
 	{
 		if (is_null_station($this->Master_model->any_select($this->sp_detail, $table, array($id)))) {
-			$this->set_global('Admin | Manage Master - ' . $table, 'Manage Master Data ' . $table);
+			$this->set_global('PPIC | Manage Master - ' . $table, 'Manage Master Data ' . $table);
 			$this->loadViews("errors/custom/404", $this->global, NULL, NULL);
 			return FALSE;
 		}
@@ -60,6 +60,26 @@ class Ppic extends BaseController
 
 		//list the stations
 		$this->data['schedule_today'] = $this->Master_model->any_select($this->sp_list, $this->tbl_schedule . $this->desc_today);
+		$this->loadViews("ppic/schedule_list_today", $this->global, $this->data, NULL);
+	}
+
+	public function schedule_history()
+	{
+		//remove failed schedule
+		if ($this->session->has_userdata('id_schedule')) {
+			$this->Master_model->any_exec(array($this->session->userdata('id_schedule')), $this->sp_delete, $this->tbl_schedule);
+			$this->session->unset_userdata('id_schedule');
+		}
+
+		//global var
+		$this->global['gPageTitle'] = 'PPIC | Manage Schedule - Schedule Today View';
+		$this->global['gContentTitle'] = 'Manage Schedule';
+		$this->global['gCardTitle'] = 'Schedule Today List';
+		// set the flash data error message if there is one
+		$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+
+		//list the stations
+		$this->data['schedule_today'] = $this->Master_model->any_select($this->sp_list, $this->tbl_schedule . $this->desc_history);
 		$this->loadViews("ppic/schedule_list_today", $this->global, $this->data, NULL);
 	}
 
@@ -221,7 +241,7 @@ class Ppic extends BaseController
 			$this->session->unset_userdata('token_schedule2');
 			$this->session->unset_userdata('id_schedule');
 
-			$this->ion_auth->set_message('Schedule Confirmed! You can still update it while it still not started yet!');
+			$this->ion_auth->set_message('Schedule Confirmed!');
 			$this->session->set_flashdata('message', $this->ion_auth->messages());
 
 			redirect('production/schedule', 'refresh');
@@ -331,6 +351,23 @@ class Ppic extends BaseController
 
 	}
 
+//	public function dashboard()
+//	{
+//
+//		$id = $this->data['productions'] = $this->Master_model->any_select($this->sp_detail, $this->tbl_schedule . $this->desc_today . 'Dashboard');
+//		$this->data['productions'] = $this->Master_model->any_select($this->sp_list, $this->tbl_production, array($id), TRUE);
+//		$this->data['schedule'] = $this->Master_model->any_select($this->sp_detail, $this->tbl_schedule, array($id));
+//		$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+//
+//		$this->data['form_attribute'] = array(
+//			'id' => 'FormValidation',
+//			'class' => 'form-horizontal'
+//		);
+//		$this->set_global('PPIC | Dashboard', 'Dashboard', 'Currently Working Schedule');
+//
+//		$this->loadViews("ppic/dashboard", $this->global, $this->data, NULL);
+//	}
+
 	public function schedule_detail($id)
 	{
 		if (!$this->is_any_verified($id, $this->tbl_schedule))
@@ -344,7 +381,7 @@ class Ppic extends BaseController
 			'id' => 'FormValidation',
 			'class' => 'form-horizontal'
 		);
-		$this->set_global('Admin | Manage Master - Schedule', 'Manage Master Data Schedule', 'Detail Schedule');
+		$this->set_global('PPIC | Manage Master - Schedule', 'Manage Master Data Schedule', 'Detail Schedule');
 
 		$this->loadViews("ppic/schedule_detail", $this->global, $this->data, NULL);
 
@@ -401,11 +438,11 @@ class Ppic extends BaseController
 
 
 		if ($is_editable) {
-			$this->set_global('Admin | Manage Master - scheme', 'Manage Master Data scheme', 'Edit scheme');
+			$this->set_global('PPIC | Manage Master - scheme', 'Manage Master Data scheme', 'Edit scheme');
 			$is_disabled = 'enabled';
 		} else {
 			$is_disabled = 'disabled';
-			$this->set_global('Admin | Manage Master - scheme', 'Manage Master Data scheme', 'Detail scheme');
+			$this->set_global('PPIC | Manage Master - scheme', 'Manage Master Data scheme', 'Detail scheme');
 			$this->data['creaby'] = array(
 				'class' => 'form-control',
 				'disabled' => 'disabled',

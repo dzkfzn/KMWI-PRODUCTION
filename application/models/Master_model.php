@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Master_model extends CI_Model
 {
 
-	function any_select($action, $table, $params = FALSE, $is_list = FALSE)
+	function any_select($action, $table, $params = FALSE, $is_list = FALSE, $is_detail = FALSE)
 	{
 		if ($params) {
 			$n = "";
@@ -21,7 +21,10 @@ class Master_model extends CI_Model
 		} else {
 			$sp = 'prod_' . $action . $table;
 			$result = $this->db->query($sp);
-			return $result->result();
+			if ($is_detail)
+				return $result->row();
+			else
+				return $result->result();
 		}
 	}
 

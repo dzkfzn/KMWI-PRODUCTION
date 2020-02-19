@@ -58,7 +58,7 @@
 												<!--0 => active => show toogle on, action => inactive-->
 												<!--1 => active => show toogle off, action => active-->
 												<?php if ($scheme->sce_is_deleted == 0)
-													echo anchor("production/scheme/inactive/" . $scheme->sce_id, '<i class="material-icons">toggle_on</i>', 'class="btn btn-simple btn-primary  btn-icon edit" data-toggle="tooltip" data-placement="top" title="Set to Inactive" onclick="clickAndDisable(this);"');
+													echo anchor("production/scheme/inactive/" . $scheme->sce_id, '<i class="material-icons">toggle_on</i>', 'class="btn btn-simple btn-primary  btn-icon edit removealert" data-toggle="tooltip" data-placement="top" title="Set to Inactive" onclick="clickAndDisable(this);"');
 												else if ($scheme->sce_is_deleted == 1)
 													echo anchor("production/scheme/active/" . $scheme->sce_id, '<i class="material-icons">toggle_off</i>', 'class="btn btn-simple  btn-icon edit" data-toggle="tooltip" data-placement="top" title="Set to Active" onclick="clickAndDisable(this);"');
 												?>
@@ -106,5 +106,4 @@
 			</div> <!-- end col-md-12 -->
 		</div> <!-- end row -->
 	</div>
-</div>
 

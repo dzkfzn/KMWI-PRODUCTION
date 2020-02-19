@@ -74,7 +74,7 @@
 											<!--0 => active => show toogle on, action => inactive-->
 											<!--1 => active => show toogle off, action => active-->
 											<?php if ($user->active == 1)
-												echo anchor("production/user/inactive/" . $user->id, '<i class="material-icons">toggle_on</i>', 'class="btn btn-simple btn-primary  btn-icon edit" data-toggle="tooltip" data-placement="top" title="Set to Inactive" onclick="clickAndDisable(this);"');
+												echo anchor("production/user/inactive/" . $user->id, '<i class="material-icons">toggle_on</i>', 'class="btn btn-simple btn-primary  btn-icon edit removealert" data-toggle="tooltip" data-placement="top" title="Set to Inactive" onclick="clickAndDisable(this);"');
 											else if ($user->active == 0)
 												echo anchor("production/user/active/" . $user->id, '<i class="material-icons">toggle_off</i>', 'class="btn btn-simple  btn-icon edit" data-toggle="tooltip" data-placement="top" title="Set to Active" onclick="clickAndDisable(this);"');
 											?>
@@ -91,5 +91,4 @@
 			</div> <!-- end col-md-12 -->
 		</div> <!-- end row -->
 	</div>
-</div>
 

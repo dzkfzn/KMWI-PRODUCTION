@@ -115,5 +115,4 @@
 			</div> <!-- end col-md-12 -->
 		</div> <!-- end row -->
 	</div>
-</div>
 

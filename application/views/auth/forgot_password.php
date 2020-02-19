@@ -28,9 +28,20 @@
 		  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons"/>
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
 		  rel="stylesheet">
+	<style type="text/css">
+		#load {
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			z-index: 9999;
+			background: url("<?= base_url('assets/img/loading4.gif') ?>") no-repeat center center rgba(0, 0, 0, 0.25)
+		}
+
+	</style>
 </head>
 
 <body class="off-canvas-sidebar">
+<div id="load"></div>
 
 
 <div class="wrapper wrapper-full-page">
@@ -39,7 +50,7 @@
 			<?= form_open('auth/forgot_password'); ?>
 
 			<div class="row">
-				<div class="col-md-4 col-sm-6 col-xs-10 col-md-offset-4 col-sm-offset-3 col-xs-offset-1">
+				<div class="col-md-4 col-sm-6 col-xs-12 col-md-offset-4 col-sm-offset-3 ">
 					<div class="card card-signup">
 						<h2 class="card-title text-center">Production</h2>
 						<h4 class="card-title text-center">Forgot Password</h4>
@@ -90,7 +101,15 @@
 
 
 </body>
-
+<script type="text/javascript">
+	document.onreadystatechange = function () {
+		var state = document.readyState
+		if (state == 'complete') {
+			document.getElementById('interactive');
+			document.getElementById('load').style.visibility="hidden";
+		}
+	}
+</script>
 <!--   Core JS Files   -->
 <script src="<?= base_url(); ?>assets/js/jquery.min.js" type="text/javascript"></script>
 <script src="<?= base_url(); ?>assets/js/bootstrap.min.js" type="text/javascript"></script>

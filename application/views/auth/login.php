@@ -51,7 +51,7 @@
 
 			<div class="row">
 				<div
-					class="col-lg-4 col-md-6 col-sm-6 col-xs-8 col-lg-offset-4 col-md-offset-3 col-sm-offset-3 col-xs-offset-2">
+					class="col-lg-4 col-md-6 col-sm-6 col-xs-12 col-lg-offset-4 col-md-offset-3 col-sm-offset-3 ">
 					<div class="card card-signup">
 						<h2 class="card-title text-center">Production</h2>
 						<h4 class="card-title text-center">Sign In</h4>

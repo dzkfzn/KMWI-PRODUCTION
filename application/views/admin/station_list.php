@@ -56,7 +56,7 @@
 											</td>
 											<td class="text-right">
 												<?= anchor("production/station/detail/" . $station->sta_id, '<i class="material-icons">remove_red_eye</i>', 'class="btn btn-simple btn-primary btn-icon" data-toggle="tooltip" data-placement="top" title="Detail" onclick="clickAndDisable(this);"') ?>
-												<?= anchor("production/station/edit/" . $station->sta_id, '<i class="material-icons">edit</i>', 'class="btn btn-simple btn-primary btn-icon edit" data-toggle="tooltip" data-placement="top" title="Edit" onclick="clickAndDisable(this);"') ?>
+												<?= anchor("production/station/edit/" . $station->sta_id, '<i class="material-icons">edit</i>', 'class="btn btn-simple btn-primary btn-icon edit removealert" data-toggle="tooltip" data-placement="top" title="Edit" onclick="clickAndDisable(this);"') ?>
 												<!--0 => active => show toogle on, action => inactive-->
 												<!--1 => active => show toogle off, action => active-->
 												<?php if ($station->sta_is_deleted == 0)
@@ -108,5 +108,4 @@
 			</div> <!-- end col-md-12 -->
 		</div> <!-- end row -->
 	</div>
-</div>
 

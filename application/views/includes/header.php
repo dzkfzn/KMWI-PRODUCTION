@@ -22,7 +22,7 @@
 
 	<!--  CSS for Demo Purpose, don't include it in your project     -->
 	<link href="<?= base_url(); ?>assets/css/demo.css" rel="stylesheet"/>
-
+	<link rel="stylesheet" href="<?= base_url(); ?>assets/css/sweetalert.css" />
 
 	<!--     Fonts and icons     -->
 	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
@@ -38,12 +38,39 @@
 			z-index: 9999;
 			background: url("<?= base_url('assets/img/loading4.gif') ?>") no-repeat center center rgba(0, 0, 0, 0.25)
 		}
-	</style>
+		.time-frame {
+			width: 300px;
+		}
 
+		.time-frame > div {
+			width: 100%;
+			text-align: center;
+		}
+
+		#date-part {
+			font-size: 1.2em;
+		}
+		#time-part {
+			font-size: 2em;
+		}
+	</style>
+	<script type="text/javascript">
+		function display_c(){
+			var refresh=1000; // Refresh rate in milli seconds
+			mytime=setTimeout('display_ct()',refresh)
+		}
+
+		function display_ct() {
+			var x = new Date()
+			var x1=x.toUTCString();// changing the display to UTC string
+			document.getElementById('ct').innerHTML = x1;
+			tt=display_c();
+		}
+	</script>
 </head>
 
 
-<body>
+<body onload="display_ct()">
 <noscript>
 	<style type="text/css">
 		.wrapper {
@@ -90,12 +117,12 @@
 					<div class="clearfix"></div>
 					<div class="collapse" id="collapseExample">
 						<ul class="nav">
-							<li>
-								<a href="#">
-									<span class="sidebar-mini"> <i class="material-icons">child_care</i>  </span>
-									<span class="sidebar-normal"> My Profile </span>
-								</a>
-							</li>
+<!--							<li>-->
+<!--								<a href="#">-->
+<!--									<span class="sidebar-mini"> <i class="material-icons">child_care</i>  </span>-->
+<!--									<span class="sidebar-normal"> My Profile </span>-->
+<!--								</a>-->
+<!--							</li>-->
 							<li>
 								<a href="<?= base_url('production/change_password') ?>">
 									<span class="sidebar-mini">
@@ -222,7 +249,7 @@
 				<div class="collapse navbar-collapse">
 					<ul class="nav navbar-nav navbar-right">
 						<li>
-							<div class="card">
+							<div class="card" >
 								<div class="card-content">
 									<?= $this->session->userdata('name'); ?> |
 									<?php if ($this->ion_auth->is_admin()) echo 'Administrator |'; ?>

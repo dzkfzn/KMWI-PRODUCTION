@@ -32,7 +32,7 @@
 								<div class="col-lg-3 col-md-4 col-sm-6">
 									<label class="col-sm-12 label-on-right">Product</label>
 									<br><span
-										class="label label-primary"><?= print_beauty_date($schedule->pro_name) ?></span>
+										class="label label-primary"><?= ($schedule->pro_name) ?></span>
 								</div>
 								<!--							</div>-->
 								<!--							<br>-->
@@ -122,12 +122,14 @@
 				<div class="col-md-12">
 					<div class="card card-testimonial">
 						<div class="card-header">
-							<h3><?= (int)(($schedule->sch_reject + $schedule->sch_actual) / $schedule->sch_plan * 100) ?>%</h3>
+							<h3><?= $percent = (int)(($schedule->sch_reject + $schedule->sch_actual) / $schedule->sch_plan * 100) ?>
+								%</h3>
 						</div>
 						<div class="card-content">
-							<div class="progress">
-								<div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25"
-									 aria-valuemin="0" aria-valuemax="100">25%
+							<div class="progress progress-line-primary">
+								<div class="progress-bar" role="progressbar" aria-valuenow="<?= $percent ?>"
+									 aria-valuemin="0" aria-valuemax="100" style="width: <?= $percent ?>%;">
+									<span class="sr-only"><?= $percent ?>% Complete</span>
 								</div>
 							</div>
 						</div>
@@ -141,19 +143,22 @@
 
 					<?php foreach ($productions as $production): ?>
 						<li class="timeline-inverted">
-							<div class="timeline-badge danger">
-								<i class="material-icons">card_travel</i>
+							<div
+								class="timeline-badge <?= ($production->sta_type == 'Production') ? 'danger' : (($production->sta_type == 'Verification') ? 'success' : 'info') ?>">
+								<i class="fa fa-gears"></i>
+
 							</div>
 							<div class="timeline-panel">
 								<div class="timeline-heading">
-									<span class="label label-danger"><?= $production->sta_name ?></span>
+									<span
+										class="label label-<?= ($production->sta_type == 'Production') ? 'danger' : (($production->sta_type == 'Verification') ? 'success' : 'info') ?>"><?= $production->sta_name . ' | ' . $production->sta_type ?></span>
 								</div>
 								<div class="timeline-body">
 									<div class="row">
 										<div class="col-xs-6">
 											<label class="label-on-right">Runtime</label>
 											<br><span
-												class="label label-primary"><?= print_beauty_date($schedule->sch_production_date) ?></span>
+												class="label label-primary"><?= (!$production->prd_counting_cycle) ? 'Zero' : secondsToTime($production->prd_counting_cycle) ?></span>
 										</div>
 										<div class="col-xs-6">
 											<label class="label-on-right">Cycle Time</label>
@@ -166,63 +171,11 @@
 
 							</div>
 						</li>
-
-
 					<?php endforeach; ?>
-
-					<li class="timeline-inverted">
-						<div class="timeline-badge success">
-							<i class="material-icons">extension</i>
-						</div>
-						<div class="timeline-panel">
-							<div class="timeline-heading">
-								<span class="label label-success">Another One</span>
-							</div>
-							<div class="timeline-body">
-								<p>Thank God for the support of my wife and real friends. I also wanted to point
-									out that it’s the first album to go number 1 off of streaming!!! I love you
-									Ellen and also my number one design rule of anything I do from shoes to
-									music to homes is that Kim has to like it....</p>
-							</div>
-						</div>
-					</li>
-					<li class="timeline-inverted">
-						<div class="timeline-badge info">
-							<i class="material-icons">fingerprint</i>
-						</div>
-						<div class="timeline-panel">
-							<div class="timeline-heading">
-								<span class="label label-info">Another Title</span>
-							</div>
-							<div class="timeline-body">
-								<p>Called I Miss the Old Kanye That’s all it was Kanye And I love you like Kanye
-									loves Kanye Famous viewing @ Figueroa and 12th in downtown LA 11:10PM</p>
-								<p>What if Kanye made a song about Kanye Royère doesn't make a Polar bear bed
-									but the Polar bear couch is my favorite piece of furniture we own It wasn’t
-									any Kanyes Set on his goals Kanye</p>
-								<hr>
-								<div class="dropdown pull-left">
-									<button type="button" class="btn btn-round btn-info dropdown-toggle"
-											data-toggle="dropdown">
-										<i class="material-icons">build</i>
-										<span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu dropdown-menu-right" role="menu">
-										<li><a href="#action">Action</a></li>
-										<li><a href="#action">Another action</a></li>
-										<li><a href="#here">Something else here</a></li>
-										<li class="divider"></li>
-										<li><a href="#link">Separated link</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-					</li>
 				</ul>
 			</div>
 		</div>
 
 
 	</div>
-</div>
 

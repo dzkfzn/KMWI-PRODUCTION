@@ -107,6 +107,7 @@ $route['production/shift/inactive/(:any)'] = 'master/shift_inactive/$1';
 
 //ppic - schedule
 $route['production/schedule'] = 'ppic/schedule_today';
+$route['production/schedule/history'] = 'ppic/schedule_history';
 $route['production/schedule/add/1'] = 'ppic/schedule_create/1';
 $route['production/schedule/add/2/(:any)/(:any)'] = 'ppic/schedule_create/2/$1/$2';
 $route['production/schedule/add/3/(:any)'] = 'ppic/schedule_create/3/$1';

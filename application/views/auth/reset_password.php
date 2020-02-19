@@ -6,7 +6,7 @@
 	<link rel="icon" href="<?= base_url(); ?>assets/img/cropped-logo-1-192x192.png" sizes="192x192"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 
-	<title>Login Page | Production - PT KMWI</title>
+	<title>Reset Password | Production - PT KMWI</title>
 
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
 	<meta name="viewport" content="width=device-width"/>

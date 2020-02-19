@@ -40,7 +40,21 @@ class Auth extends BaseController
 
 
 		} elseif ($this->ion_auth->is_ppic()) {
-			$this->global['gPageTitle'] = 'PPIC | Dashboard';
+
+			$sch = $this->Master_model->any_select($this->sp_detail, $this->tbl_schedule . $this->desc_today . 'Dashboard', FALSE, FALSE, TRUE);
+			$id = NULL;
+			if ($sch)
+				$id = $sch->sch_id;
+			$this->data['productions'] = $this->Master_model->any_select($this->sp_list, $this->tbl_production, array($id), TRUE);
+			$this->data['schedule'] = $this->Master_model->any_select($this->sp_detail, $this->tbl_schedule, array($id));
+			$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+			$this->data['form_attribute'] = array(
+				'id' => 'FormValidation',
+				'class' => 'form-horizontal'
+			);
+			$this->set_global('PPIC | Dashboard', 'Dashboard', 'Currently Working Schedule');
+
 			$this->loadViews("ppic/dashboard", $this->global, $this->data, NULL);
 		}
 	}
@@ -225,7 +239,7 @@ class Auth extends BaseController
 				'class' => 'form-control',
 				'placeholder' => 'Old Password',
 				'type' => 'password',
-				'required'=> 'required',
+				'required' => 'required',
 			);
 			$this->data['new_password'] = array(
 				'name' => 'new',
@@ -234,7 +248,7 @@ class Auth extends BaseController
 				'placeholder' => 'New Password',
 				'minLength' => 8,
 				'type' => 'password',
-				'required'=> 'required',
+				'required' => 'required',
 			);
 			$this->data['new_password_confirm'] = array(
 				'name' => 'new_confirm',
@@ -243,7 +257,7 @@ class Auth extends BaseController
 				'placeholder' => 'Confirm New Password',
 				'minLength' => 8,
 				'type' => 'password',
-				'required'=> 'required',
+				'required' => 'required',
 			);
 			$this->data['user_id'] = array(
 				'name' => 'user_id',
@@ -258,7 +272,7 @@ class Auth extends BaseController
 			// render
 //			$this->_render_page('auth' . DIRECTORY_SEPARATOR . 'change_password', $this->data);
 			$this->set_global('Admin | Change Password', 'Change Password', 'Change Password');
-			$this->loadViews('auth/change_password',$this->global,$this->data,'');
+			$this->loadViews('auth/change_password', $this->global, $this->data, '');
 		} else {
 			$identity = $this->session->userdata('identity');
 

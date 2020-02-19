@@ -410,6 +410,17 @@ function is_now_date_same($datetime)
 	return FALSE;
 }
 
+function is_now_date_history($datetime)
+{
+	$eventdate = strtotime($datetime);
+
+	$today = strtotime('now');
+	if (date('m-d-Y', $today) > date('m-d-Y', $eventdate)) {
+		return TRUE;
+	}
+	return FALSE;
+}
+
 
 function pluralize($count, $text)
 {
