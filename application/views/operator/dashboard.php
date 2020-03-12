@@ -17,7 +17,7 @@
 						<div class="card card-pricing card-raised">
 							<div class="content">
 								<h1 class="card-title">
-									<?= ($schedule->sif_name) . ' (' . print_beauty_time($schedule->sif_start_date) . '-' . print_beauty_time($schedule->sif_end_date) . ')' ?>
+									<?= ($schedule->sif_name) ?>
 								</h1>
 							</div>
 							<div class="card-footer ">
