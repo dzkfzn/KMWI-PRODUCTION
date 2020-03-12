@@ -206,12 +206,12 @@
 						<div class="col-sm-3 col-xs-6">
 							<div class="card card-pricing card-raised">
 								<div class="content">
-									<h3 class="card-title"><?= $production->sta_name . ' (' . $production->sta_type . ')' ?></h3>
+									<h3 class="card-title"><?= $production->sta_name  ?></h3><small><?= '(' . $production->sta_type . ')' ?></small>
 								</div>
 								<div class="card-footer ">
 									<div class="text-center">
 										<h4>
-											<b><?= (!$production->prd_counting_cycle) ? 'Zero' : secondsToTime($production->prd_counting_cycle) ?></b>
+											<b><?= (!$production->prd_counting_cycle) ? '00:00:00' : gmdate("H:i:s", $production->prd_counting_cycle); ?></b>
 										</h4>
 									</div>
 								</div>

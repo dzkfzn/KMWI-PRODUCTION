@@ -42,6 +42,188 @@ class Ppic extends BaseController
 		redirect('production', 'refresh');
 	}
 
+	public function menu_line_overview()
+	{
+		$sch = $this->Master_model->any_select($this->sp_detail, $this->tbl_schedule . $this->desc_today . 'Dashboard', FALSE, FALSE, TRUE);
+		$id = NULL;
+		if ($sch)
+			$id = $sch->sch_id;
+
+		$this->data['productions'] = $this->Master_model->any_select($this->sp_list, $this->tbl_production, array($id), TRUE);
+		$this->data['schedule'] = $this->Master_model->any_select($this->sp_detail, $this->tbl_schedule, array($id));
+		$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+		$this->data['form_attribute'] = array(
+			'id' => 'FormValidation',
+			'class' => 'form-horizontal'
+		);
+		$this->set_global('PPIC | Dashboard', 'Dashboard', 'Currently Working Schedule');
+
+		$this->loadViews("ppic/line_overview", $this->global, $this->data, NULL);
+	}
+
+	public function menu_product_counting()
+	{
+		$sch = $this->Master_model->any_select($this->sp_detail, $this->tbl_schedule . $this->desc_today . 'Dashboard', FALSE, FALSE, TRUE);
+		$id = NULL;
+		if ($sch)
+			$id = $sch->sch_id;
+
+		$this->data['productions'] = $this->Master_model->any_select($this->sp_list, $this->tbl_production, array($id), TRUE);
+		$this->data['schedule'] = $this->Master_model->any_select($this->sp_detail, $this->tbl_schedule, array($id));
+		$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+		$this->data['form_attribute'] = array(
+			'id' => 'FormValidation',
+			'class' => 'form-horizontal'
+		);
+		$this->set_global('PPIC | Dashboard', 'Dashboard', 'Currently Working Schedule');
+		$this->loadViews("ppic/product_counting", $this->global, $this->data, NULL);
+	}
+
+	public function report_rejection($type_report = NULL)
+	{
+		if ($type_report == 'daily') {
+			$this->form_validation->set_rules('pro_date', 'Date', 'trim|required');
+		} else if ($type_report == 'range') {
+			$this->form_validation->set_rules('start_pro_date', 'Date', 'trim|required');
+			$this->form_validation->set_rules('end_pro_date', 'Date', 'trim|required');
+		}
+
+		$this->data['pro_date'] = array(
+			'name' => 'pro_date',
+			'id' => 'pro_date',
+			'class' => 'form-control datepicker',
+			'type' => 'text',
+			'maxLength' => 10,
+			'value' => $this->form_validation->set_value('pro_date'),
+		);
+		$this->data['start_pro_date'] = array(
+			'name' => 'start_pro_date',
+			'id' => 'start_pro_date',
+			'class' => 'form-control datepicker',
+			'type' => 'text',
+			'maxLength' => 10,
+			'value' => $this->form_validation->set_value('start_pro_date'),
+		);
+		$this->data['end_pro_date'] = array(
+			'name' => 'end_pro_date',
+			'id' => 'end_pro_date',
+			'class' => 'form-control datepicker',
+			'type' => 'text',
+			'maxLength' => 10,
+			'value' => $this->form_validation->set_value('end_pro_date'),
+		);
+
+//		$this->data['form_attribute'] = array(
+//			'id' => 'FormValidation'
+//		);
+
+		if ($this->form_validation->run() === TRUE) {
+
+			if ($type_report == 'daily') {
+				$date = str_replace('/', '-', $this->input->post('pro_date'));
+				$report_date = date('Y-m-d', strtotime($date));
+
+				$this->data['report_sta'] = $this->Master_model->any_select($this->sp_list, $this->tbl_report . $this->desc_reject . $this->tbl_station, array($report_date), TRUE);
+				$this->data['report_sif'] = $this->Master_model->any_select($this->sp_list, $this->tbl_report . $this->desc_reject . $this->tbl_shift, array($report_date), TRUE);
+				$this->data['report_date'] = $report_date;
+				$this->set_global('PPIC | Report', 'Report Rejection', 'Currently Working Schedule');
+				$this->loadViews("ppic/report_rejection", $this->global, $this->data, NULL);
+			} else if ($type_report == 'range') {
+				$start = str_replace('/', '-', $this->input->post('start_pro_date'));
+				$end = str_replace('/', '-', $this->input->post('end_pro_date'));
+				$start = date('Y-m-d', strtotime($start));
+				$end = date('Y-m-d', strtotime($end));
+
+				$this->data['report_range'] = $this->Master_model->any_select($this->sp_list, $this->tbl_report . $this->desc_reject . 'AllRange', array($start, $end), TRUE);
+				$this->data['report_range_sif'] = $this->Master_model->any_select($this->sp_list, $this->tbl_report . $this->desc_reject . 'ShiftRange', array($start, $end), TRUE);
+				$this->data['report_range_sta'] = $this->Master_model->any_select($this->sp_list, $this->tbl_report . $this->desc_reject . 'StationRange', array($start, $end), TRUE);
+
+				$this->data['start_report_date'] = $start;
+				$this->data['end_report_date'] = $end;
+				$this->set_global('PPIC | Report', 'Report Rejection', 'Currently Working Schedule');
+				$this->loadViews("ppic/report_rejection", $this->global, $this->data, NULL);
+			}
+
+		} else {
+			$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+
+			$this->set_global('PPIC | Report', 'Report Rejection', 'Currently Working Schedule');
+			$this->loadViews("ppic/report_rejection", $this->global, $this->data, NULL);
+		}
+
+
+	}
+
+	public function report_product_achievement()
+	{
+		$this->form_validation->set_rules('pro_date', 'Date', 'trim|required');
+
+		$this->data['pro_date'] = array(
+			'name' => 'pro_date',
+			'id' => 'pro_date',
+			'class' => 'form-control monthpicker',
+			'type' => 'text',
+			'maxLength' => 10,
+			'value' => $this->form_validation->set_value('pro_date'),
+		);
+
+		if ($this->form_validation->run() === TRUE) {
+
+			$date = explode("/", $this->input->post('pro_date'));
+			$month = $date[0];
+			$year = $date[1];
+//			$this->data['report_sta'] = $this->Master_model->any_select($this->sp_list, $this->tbl_report . $this->desc_achievement . $this->tbl_station, array($month,$year), TRUE);
+			$this->data['report_sch'] = $this->Master_model->any_select($this->sp_list, $this->tbl_report . $this->desc_achievement . $this->tbl_schedule, array($month, $year), TRUE);
+
+			$this->set_global('PPIC | Report', 'Report Rejection', 'Currently Working Schedule');
+			$this->loadViews("ppic/report_product_achievement", $this->global, $this->data, NULL);
+
+		} else {
+			$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+			$this->set_global('PPIC | Report', 'Report Rejection', 'Currently Working Schedule');
+			$this->loadViews("ppic/report_product_achievement", $this->global, $this->data, NULL);
+		}
+	}
+
+	public function report_plan_vs_actual()
+	{
+		$this->form_validation->set_rules('pro_date', 'Date', 'trim|required');
+
+		$this->data['pro_date'] = array(
+			'name' => 'pro_date',
+			'id' => 'pro_date',
+			'class' => 'form-control datepicker',
+			'type' => 'text',
+			'maxLength' => 10,
+			'value' => $this->form_validation->set_value('pro_date'),
+		);
+
+		if ($this->form_validation->run() === TRUE) {
+
+			$date = str_replace('/', '-', $this->input->post('pro_date'));
+			$report_date = date('Y-m-d', strtotime($date));
+
+			$this->data['report_sta'] = $this->Master_model->any_select($this->sp_list, $this->tbl_report . $this->desc_pva . $this->tbl_station, array($report_date), TRUE);
+
+			$this->data['report_date'] = $report_date;
+//			echo "<pre>";
+//			print_r($this->data['report_sta']);
+//			exit();
+
+			$this->set_global('PPIC | Report', 'Report Rejection', 'Currently Working Schedule');
+			$this->loadViews("ppic/report_plan_vs_actual", $this->global, $this->data, NULL);
+
+		} else {
+			$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+			$this->set_global('PPIC | Report', 'Report Rejection', 'Currently Working Schedule');
+			$this->loadViews("ppic/report_plan_vs_actual", $this->global, $this->data, NULL);
+		}
+	}
 
 	public function schedule_today()
 	{
@@ -219,7 +401,6 @@ class Ppic extends BaseController
 			$this->global['gContentTitle'] = 'Manage Schedule';
 			$this->global['gCardTitle'] = 'Add Cycle Time Each Station';
 			$this->loadViews("ppic/schedule_add2", $this->global, $this->data, NULL);
-
 		}
 	}
 

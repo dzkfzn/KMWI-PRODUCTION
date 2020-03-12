@@ -45,6 +45,9 @@ class Auth extends BaseController
 			$id = NULL;
 			if ($sch)
 				$id = $sch->sch_id;
+//			else if ($this->session->has_userdata('dashboard_schedule'))
+//				$id = $this->session->userdata('dashboard_schedule');
+
 			$this->data['productions'] = $this->Master_model->any_select($this->sp_list, $this->tbl_production, array($id), TRUE);
 			$this->data['schedule'] = $this->Master_model->any_select($this->sp_detail, $this->tbl_schedule, array($id));
 			$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));

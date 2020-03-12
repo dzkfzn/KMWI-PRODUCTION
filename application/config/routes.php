@@ -115,6 +115,16 @@ $route['production/schedule/add/3/(:any)/(:any)'] = 'ppic/schedule_create_step3/
 $route['production/schedule/inactive/(:any)'] = 'ppic/schedule_inactive/$1';
 $route['production/schedule/detail/(:any)'] = 'ppic/schedule_detail/$1';
 
+//ppic - menu
+$route['production/line_overview'] = 'ppic/menu_line_overview';
+$route['production/product_counting'] = 'ppic/menu_product_counting';
+
+$route['production/key_index_performance'] = 'ppic/key_index_performance';
+$route['production/product_achievement'] = 'ppic/report_product_achievement';
+$route['production/plan_vs_actual'] = 'ppic/report_plan_vs_actual';
+
+$route['production/rejection'] = 'ppic/report_rejection';
+$route['production/rejection/(:any)'] = 'ppic/report_rejection/$1';
 
 $route['production/shift/edit/(:any)'] = 'master/shift_edit/$1';
 $route['production/shift/detail/(:any)'] = 'master/shift_edit/$1/0';

@@ -92,4 +92,39 @@ class Play extends CI_Controller
 	}
 
 
+	public function google_voice()
+	{
+		$text = 'Assalamualaikum';
+		$text = urlencode($text);
+		$lang = urldecode("id");
+		$file = md5($text) . ".mp3";
+
+//		echo $file;
+//		exit();
+
+		if (!file_exists($file) || filesize($file) == 0) {
+
+//			$content = "some text here";
+			$mp3 = file_get_contents('https://translate.google.com.vn/translate_tts?ie=UTF-8&client=tw-ob&q=' . $text . '&tl=' . $lang);
+			$fp = fopen($_SERVER['DOCUMENT_ROOT'] . "/KMWI/" . $file, "wb");
+			fwrite($fp, $mp3);
+			fclose($fp);
+
+//			if (file_put_contents($file, $mp3)) {
+//				echo "Saved<br>";
+//			} else {
+//				echo "Wasn't able to save it !<br>";
+//			}
+		} else {
+			echo "Already exist<br>";
+		}
+		$this->data['tes'] = $file;
+
+//		echo base_url($file);
+//		exit();
+		$this->load->view('portal', $this->data);
+
+	}
+
+
 }

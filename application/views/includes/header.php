@@ -22,7 +22,7 @@
 
 	<!--  CSS for Demo Purpose, don't include it in your project     -->
 	<link href="<?= base_url(); ?>assets/css/demo.css" rel="stylesheet"/>
-	<link rel="stylesheet" href="<?= base_url(); ?>assets/css/sweetalert.css" />
+	<link rel="stylesheet" href="<?= base_url(); ?>assets/css/sweetalert.css"/>
 
 	<!--     Fonts and icons     -->
 	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
@@ -30,6 +30,9 @@
 		  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons"/>
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
 		  rel="stylesheet">
+	<script src="<?php echo base_url(); ?>/assets/amchart/core.js"></script>
+	<script src="<?php echo base_url(); ?>/assets/amchart/charts.js"></script>
+	<script src="<?php echo base_url(); ?>/assets/amchart/themes/animated.js"></script>
 	<style type="text/css">
 		#load {
 			width: 100%;
@@ -38,33 +41,35 @@
 			z-index: 9999;
 			background: url("<?= base_url('assets/img/loading4.gif') ?>") no-repeat center center rgba(0, 0, 0, 0.25)
 		}
-		.time-frame {
-			width: 300px;
-		}
 
-		.time-frame > div {
-			width: 100%;
-			text-align: center;
-		}
+		/*.time-frame {*/
+		/*	width: 300px;*/
+		/*}*/
 
-		#date-part {
-			font-size: 1.2em;
-		}
-		#time-part {
-			font-size: 2em;
-		}
+		/*.time-frame > div {*/
+		/*	width: 100%;*/
+		/*	text-align: center;*/
+		/*}*/
+
+		/*#date-part {*/
+		/*	font-size: 1.2em;*/
+		/*}*/
+
+		/*#time-part {*/
+		/*	font-size: 2em;*/
+		/*}*/
 	</style>
 	<script type="text/javascript">
-		function display_c(){
-			var refresh=1000; // Refresh rate in milli seconds
-			mytime=setTimeout('display_ct()',refresh)
+		function display_c() {
+			var refresh = 1000; // Refresh rate in milli seconds
+			mytime = setTimeout('display_ct()', refresh)
 		}
 
 		function display_ct() {
 			var x = new Date()
-			var x1=x.toUTCString();// changing the display to UTC string
+			var x1 = x.toUTCString();// changing the display to UTC string
 			document.getElementById('ct').innerHTML = x1;
-			tt=display_c();
+			tt = display_c();
 		}
 	</script>
 </head>
@@ -117,12 +122,12 @@
 					<div class="clearfix"></div>
 					<div class="collapse" id="collapseExample">
 						<ul class="nav">
-<!--							<li>-->
-<!--								<a href="#">-->
-<!--									<span class="sidebar-mini"> <i class="material-icons">child_care</i>  </span>-->
-<!--									<span class="sidebar-normal"> My Profile </span>-->
-<!--								</a>-->
-<!--							</li>-->
+							<!--							<li>-->
+							<!--								<a href="#">-->
+							<!--									<span class="sidebar-mini"> <i class="material-icons">child_care</i>  </span>-->
+							<!--									<span class="sidebar-normal"> My Profile </span>-->
+							<!--								</a>-->
+							<!--							</li>-->
 							<li>
 								<a href="<?= base_url('production/change_password') ?>">
 									<span class="sidebar-mini">
@@ -142,9 +147,27 @@
 				</div>
 			</div>
 			<ul class="nav">
+				<li class="hidden-lg hidden-md">
+					<a>
+						<div id="date-part2"></div>
+					</a>
+				</li>
+				<li class="hidden-lg hidden-md">
+					<a>
+						<?php if ($this->ion_auth->is_admin()) echo 'Administrator |'; ?>
+						<?php if ($this->ion_auth->is_ppic()) echo 'PPIC |'; ?>
+						<?php if ($this->ion_auth->is_operator()) echo 'Operator |'; ?>
+						Last
+						Login: <?= $this->session->userdata('old_last_login') ? time_elapsed_string(date("Y-m-d H:i:s", $this->session->userdata('old_last_login'))) : 'Never Login Before' ?>
+
+					</a>
+				</li>
+				<li class="separator hidden-lg hidden-md"></li>
+			</ul>
+			<ul class="nav">
 
 				<?php $menu_master = array('user', 'station', 'scheme', 'product', 'shift'); ?>
-				<?php $menu_ppic = array('schedule'); ?>
+				<?php $menu_ppic = array('rejection', 'key_index_performance', 'product_achievement', 'plan_vs_actual'); ?>
 				<?php $uri = $this->uri->segment(2); ?>
 
 				<!--				Begin of If Admin -->
@@ -212,12 +235,76 @@
 							<p> Dashboard </p>
 						</a>
 					</li>
-					<li <?=  (strtolower($uri) === "schedule") ? 'class="active"' : '' ?> >
+					<li <?= (strtolower($uri) === "schedule") ? 'class="active"' : '' ?>>
 						<a href="<?= base_url('production/schedule') ?>">
 							<i class="material-icons">update</i>
 							<p> Schedule </p>
 						</a>
 					</li>
+					<li <?= (strtolower($uri) === "line_overview") ? 'class="active"' : '' ?>>
+						<a href="<?= base_url('production/line_overview') ?>">
+							<i class="material-icons">linear_scale</i>
+							<p> Line Overview </p>
+						</a>
+					</li>
+					<li <?= (strtolower($uri) === "product_counting") ? 'class="active"' : '' ?>>
+						<a href="<?= base_url('production/product_counting') ?>">
+							<i class="material-icons">local_shipping</i>
+							<p> Product Counting </p>
+						</a>
+					</li>
+					<li <?= (strtolower($uri) === "runtest_counting") ? 'class="active"' : '' ?>>
+						<a href="<?= base_url('production/runtest_counting') ?>">
+							<i class="material-icons">check_circle_outline</i>
+							<p> Runtest Counting </p>
+						</a>
+					</li>
+					<li <?= (strtolower($uri) === "alarm_repair") ? 'class="active"' : '' ?>>
+						<a href="<?= base_url('production/alarm_repair') ?>">
+							<i class="material-icons">timer</i>
+							<p> Alarm Repair </p>
+						</a>
+					</li>
+					<li <?= is_active_navigation($uri, $menu_ppic) ?>>
+						<a data-toggle="collapse" href="#adminMenu" <?= is_expanded_navigation($uri, $menu_ppic); ?>>
+							<i class="material-icons">show_chart</i>
+							<p> Reporting
+								<b class="caret"></b>
+							</p>
+						</a>
+
+						<?php
+						?>
+						<div class="<?= is_collapse_navigation($this->uri->segment(2), $menu_ppic) ?>" id="adminMenu">
+							<ul class="nav">
+								<li <?php if ($uri == "key_index_performance") echo 'class="active"'; ?>>
+									<a href="<?= base_url('production/key_index_performance') ?>"">
+									<span class="sidebar-mini"> KIP</span>
+									<span class="sidebar-normal"> Key Index Performance </span>
+									</a>
+								</li>
+								<li <?php if ($uri == "product_achievement") echo 'class="active"'; ?>>
+									<a href="<?= base_url('production/product_achievement') ?>"">
+									<span class="sidebar-mini">PAC </span>
+									<span class="sidebar-normal"> Product Achievement </span>
+									</a>
+								</li>
+								<li <?php if ($uri == "plan_vs_actual") echo 'class="active"'; ?>>
+									<a href="<?= base_url('production/plan_vs_actual') ?>"">
+									<span class="sidebar-mini">PVA</span>
+									<span class="sidebar-normal"> Plan vs Actual </span>
+									</a>
+								</li>
+								<li <?php if ($uri == "rejection") echo 'class="active"'; ?>>
+									<a href="<?= base_url('production/rejection') ?>">
+										<span class="sidebar-mini">REJ </span>
+										<span class="sidebar-normal"> Rejection </span>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</li>
+
 				<?php endif ?>
 				<!--				End of if PPIC-->
 
@@ -249,14 +336,30 @@
 				<div class="collapse navbar-collapse">
 					<ul class="nav navbar-nav navbar-right">
 						<li>
-							<div class="card" >
+							<div class="card card-pricing">
 								<div class="card-content">
-									<?= $this->session->userdata('name'); ?> |
-									<?php if ($this->ion_auth->is_admin()) echo 'Administrator |'; ?>
-									<?php if ($this->ion_auth->is_ppic()) echo 'PPIC |'; ?>
-									<?php if ($this->ion_auth->is_operator()) echo 'Operator |'; ?>
-									Last
-									Login: <?= $this->session->userdata('old_last_login') ? time_elapsed_string(date("Y-m-d H:i:s", $this->session->userdata('old_last_login'))) : 'Never Login Before' ?>
+										<?= $this->session->userdata('name'); ?> |
+										<?php if ($this->ion_auth->is_admin()) echo 'Administrator |'; ?>
+										<?php if ($this->ion_auth->is_ppic()) echo 'PPIC |'; ?>
+										<?php if ($this->ion_auth->is_operator()) echo 'Operator |'; ?>
+										Last
+										Login: <?= $this->session->userdata('old_last_login') ? time_elapsed_string(date("Y-m-d H:i:s", $this->session->userdata('old_last_login'))) : 'Never Login Before' ?>
+								</div>
+							</div>
+						</li>
+						<li class="separator hidden-lg hidden-md"></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li>
+							&nbsp;
+						</li>
+						<li class="separator hidden-lg hidden-md"></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li>
+							<div class="card card-pricing ">
+								<div class="card-content">
+										<div id='date-part'></div>
 								</div>
 							</div>
 						</li>

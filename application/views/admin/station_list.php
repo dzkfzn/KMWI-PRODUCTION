@@ -56,13 +56,13 @@
 											</td>
 											<td class="text-right">
 												<?= anchor("production/station/detail/" . $station->sta_id, '<i class="material-icons">remove_red_eye</i>', 'class="btn btn-simple btn-primary btn-icon" data-toggle="tooltip" data-placement="top" title="Detail" onclick="clickAndDisable(this);"') ?>
-												<?= anchor("production/station/edit/" . $station->sta_id, '<i class="material-icons">edit</i>', 'class="btn btn-simple btn-primary btn-icon edit removealert" data-toggle="tooltip" data-placement="top" title="Edit" onclick="clickAndDisable(this);"') ?>
+												<?= anchor("production/station/edit/" . $station->sta_id, '<i class="material-icons">edit</i>', 'class="btn btn-simple btn-primary btn-icon edit " data-toggle="tooltip" data-placement="top" title="Edit" onclick="clickAndDisable(this);"') ?>
 												<!--0 => active => show toogle on, action => inactive-->
 												<!--1 => active => show toogle off, action => active-->
 												<?php if ($station->sta_is_deleted == 0)
-													echo anchor("production/station/inactive/" . $station->sta_id, '<i class="material-icons">toggle_on</i>', 'class="btn btn-simple btn-primary  btn-icon edit" data-toggle="tooltip" data-placement="top" title="Set to Inactive" onclick="clickAndDisable(this);"');
+													echo anchor("production/station/inactive/" . $station->sta_id, '<i class="material-icons">toggle_on</i>', 'class="btn btn-simple btn-primary  btn-icon edit removealert" data-toggle="tooltip" data-placement="top" title="Set to Inactive" onclick="clickAndDisable(this);"');
 												else if ($station->sta_is_deleted == 1)
-													echo anchor("production/station/active/" . $station->sta_id, '<i class="material-icons">toggle_off</i>', 'class="btn btn-simple  btn-icon edit" data-toggle="tooltip" data-placement="top" title="Set to Active" onclick="clickAndDisable(this);"');
+													echo anchor("production/station/active/" . $station->sta_id, '<i class="material-icons">toggle_off</i>', 'class="btn btn-simple  btn-icon edit removealert" data-toggle="tooltip" data-placement="top" title="Set to Active" onclick="clickAndDisable(this);"');
 												?>
 
 

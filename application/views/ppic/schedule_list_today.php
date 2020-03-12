@@ -24,7 +24,7 @@
 											</a>
 
 											<?php if ($this->uri->segment(3) == 'history'): ?>
-												<a href="<?= base_url('production/schedule/') ?>"
+												<a href="<?= base_url('production/schedule/') ?>" 
 												   class="btn btn-primary btn-round" onclick="clickAndDisable(this);">
 													<i class="material-icons">access_time</i>
 													<b>Today View</b>
@@ -73,7 +73,8 @@
 											<!--if true then compare with start date else end date-->
 											<?php
 											$is_production_date_today = is_now_date_same($schedule->sch_production_date);
-											$is_time_between_shift = is_now_time_between($schedule->sif_start_date, $schedule->sif_end_date);
+											$is_production_date_pass_night = is_now_date_same_night_shift($schedule->sch_production_date);
+											$is_time_between_shift = is_now_time_between($schedule->sif_start_date, $schedule->sif_end_date, $is_production_date_pass_night);
 											$is_pass_night = is_shift_pass_midnight($schedule->sif_start_date, $schedule->sif_end_date);
 											$is_time_before_shift = is_time_before($schedule->sif_start_date);
 
@@ -100,21 +101,23 @@
 													</td>
 												<?php endif; ?>
 
-
 											<?php else: ?>
-
-
-												<?php $time = ago($schedule->sch_production_date, $schedule->sif_start_date); ?>
-												<?php if (!is_now_date_history($schedule->sch_production_date)): ?>
-													<td><?= print_beauty_statusv2('to be worked ' . $time, 'primary') ?></td>
-												<?php else: ?>
-													<td><?= print_beauty_statusv2('finished ' . $time, 'default') ?></td>
-												<?php endif; ?>
-
 												<td class="text-right">
 													<?= anchor("production/schedule/detail/" . $schedule->sch_id, '<i class="material-icons">remove_red_eye</i>', 'class="btn btn-simple btn-primary btn-icon" data-toggle="tooltip" data-placement="top" title="Detail" onclick="clickAndDisable(this);"') ?>
-													<?= anchor("production/schedule/inactive/" . $schedule->sch_id, '<i class="material-icons">delete</i>', 'class="btn btn-simple btn-primary btn-icon edit" data-toggle="tooltip" data-placement="top" title="Remove" onclick="clickAndDisable(this);"') ?>
 												</td>
+												<?php if ($is_time_between_shift && $is_pass_night && $is_production_date_pass_night): ?>
+													<?php $time = ago($schedule->sch_production_date, $schedule->sif_end_date, FALSE, FALSE, $is_pass_night); ?>
+													<td><?= print_beauty_statusv2('currently working ' . $time . ' Left', 'success') ?></td>
+													<?php $this->session->set_userdata('dashboard_schedule', $schedule->sch_id); ?>
+												<?php elseif (!is_now_date_history($schedule->sch_production_date)): ?>
+													<?php $time = ago($schedule->sch_production_date, $schedule->sif_start_date); ?>
+													<td><?= print_beauty_statusv2('to be worked ' . $time, 'primary') ?></td>
+													<?= anchor("production/schedule/inactive/" . $schedule->sch_id, '<i class="material-icons ">delete</i>', 'class="btn btn-simple btn-primary btn-icon edit removealert" data-toggle="tooltip" data-placement="top" title="Remove" ') ?>
+
+												<?php else: ?>
+													<?php $time = ago($schedule->sch_production_date, $schedule->sif_end_date, FALSE, FALSE, $is_pass_night); ?>
+													<td><?= print_beauty_statusv2('finished ' . $time, 'default') ?></td>
+												<?php endif; ?>
 
 											<?php endif; ?>
 

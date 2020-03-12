@@ -368,7 +368,7 @@ function is_shift_pass_midnight($start_date, $end_date)
 
 }
 
-function is_now_time_between($start_date, $end_date)
+function is_now_time_between($start_date, $end_date, $is_prod_date_pass_night = FALSE)
 {
 	$now = new DateTime(date("H:i"));
 
@@ -376,8 +376,10 @@ function is_now_time_between($start_date, $end_date)
 	$end = new DateTime($end_date);
 
 	//in case kalo shift malem contoh 18:00-02:00
-	if ($start > $end)
-		$end->modify('+1 day');
+	if ($start > $end && $is_prod_date_pass_night)
+		$start->modify('-1 day');
+	else if ($start > $end)
+		$start->modify('+1 day');
 
 //	$end = DateTime::createFromFormat('H:i', $end_date);
 	if ($start <= $now && $now <= $end) {
@@ -404,6 +406,17 @@ function is_now_date_same($datetime)
 	$eventdate = strtotime($datetime);
 
 	$today = strtotime('now');
+	if (date('m-d-Y', $today) == date('m-d-Y', $eventdate)) {
+		return TRUE;
+	}
+	return FALSE;
+}
+
+function is_now_date_same_night_shift($datetime)
+{
+	$eventdate = strtotime($datetime);
+
+	$today = strtotime('yesterday');
 	if (date('m-d-Y', $today) == date('m-d-Y', $eventdate)) {
 		return TRUE;
 	}

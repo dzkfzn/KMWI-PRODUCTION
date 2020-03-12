@@ -26,6 +26,7 @@ class BaseController extends CI_Controller
 	protected $sp_check = 'check';
 
 	protected $tbl_product = 'Product';
+	protected $tbl_report = 'Report';
 	protected $tbl_station = 'Station';
 	protected $tbl_scheme = 'Scheme';
 	protected $tbl_shift = 'Shift';
@@ -36,6 +37,9 @@ class BaseController extends CI_Controller
 
 	protected $desc_today = 'Today';
 	protected $desc_history = 'History';
+	protected $desc_reject = 'Reject';
+	protected $desc_pva = 'PlanVsActual';
+	protected $desc_achievement = 'ProductAchievement';
 	/**
 	 * Takes mixed data and optionally a status code, then creates the response
 	 *

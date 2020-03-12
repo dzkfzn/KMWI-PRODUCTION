@@ -57,6 +57,7 @@
 	<div class="full-page pricing-page" data-image="<?= base_url() ?>/assets/img/portal.png">
 
 		<div class="content">
+
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6 col-md-offset-3 text-center">

@@ -135,8 +135,8 @@ $config['argon2_admin_params']		= array(
  | The library will fail for empty password or password size above 4096 bytes.
  | This is an arbitrary (long) value to protect against DOS attack.
  */
-$config['site_title']                 = "Dzaki Fauzaan";       // Site Title, example.com
-$config['admin_email']                = "no-reply@gmail.com"; // Admin Email, admin@example.com
+$config['site_title']                 = "PT. KREASI MANDIRI WINTOR INDONESIA";       // Site Title, example.com
+$config['admin_email']                = "no-reply@kmwi-astra.com.com"; // Admin Email, admin@example.com
 $config['default_group']              = 'members';           // Default group, use name
 $config['admin_group']                = 'admin';             // Default administrators group, use name
 $config['ppic_group']				  = 'ppic';             // Group PPIC

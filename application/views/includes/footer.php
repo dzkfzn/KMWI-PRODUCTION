@@ -96,15 +96,15 @@
 				type: "warning",
 				showCancelButton: true,
 				confirmButtonColor: '#DD6B55',
-				confirmButtonText: 'Yes, Remove!',
-				cancelButtonText: "No, Cancel!",
-				confirmButtonClass: "btn-danger",
+				confirmButtonText: 'Yes!',
+				cancelButtonText: "No!",
+				confirmButtonClass: "btn-primary",
 				closeOnConfirm: false,
 				closeOnCancel: false
 			},
 			function (isConfirm) {
 				if (isConfirm) {
-					swal("Deleted!", "Schedule has been deleted!", "success");
+					swal("Success!", "" , "success");
 					// setTimeout(function(){ window.location.replace = url; }, 2000);
 					window.setTimeout(function () {
 						window.location.replace(url);
@@ -121,15 +121,14 @@
 	$(document).ready(function () {
 		var interval = setInterval(function () {
 			var momentNow = moment();
-			$('#date-part').html(momentNow.format('YYYY MMMM DD') + ' '
-				+ momentNow.format('dddd')
-					.substring(0, 3).toUpperCase());
-			$('#time-part').html(momentNow.format('A hh:mm:ss'));
+			$('#date-part').html(momentNow.format('dddd, DD MMMM YYYY hh:mm:ss A'));
+		}, 100);
+		var interval2 = setInterval(function () {
+			var momentNow = moment();
+			$('#date-part2').html(momentNow.format('dddd, DD MMMM hh:mm:ss A'));
 		}, 100);
 
-		$('#stop-interval').on('click', function () {
-			clearInterval(interval);
-		});
+
 	});
 </script>
 
