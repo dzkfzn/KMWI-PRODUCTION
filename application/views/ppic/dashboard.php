@@ -185,7 +185,7 @@
 								</div>
 								<div class="row">
 									<div style="text-align: center;">
-										<img src="<?= base_url('assets/img/LINE.png') ?>"
+										<img src="<?= base_url('assets/img/kmwi_assi_line.png') ?>"
 											 style="transform: scale(1); max-width: 100%;width: auto;max-height:600px;"
 											 alt="Responsive image">
 									</div>
