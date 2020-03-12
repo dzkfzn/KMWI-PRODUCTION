@@ -15,39 +15,33 @@
 				<div class="col-md-12">
 					<div class="col-sm-4 col-xs-12">
 						<div class="card card-pricing card-raised">
+							<div class="card-header card-header-tabs" data-background-color="purple">
+								<h4><b>SHIFT</b></h4>
+							</div>
 							<div class="content">
 								<h3 class="card-title">
 									<?= ($schedule->sif_name) . ' (' . print_beauty_time($schedule->sif_start_date) . '-' . print_beauty_time($schedule->sif_end_date) . ')' ?>
 								</h3>
 							</div>
-							<div class="card-footer ">
-								<div class="text-center">
-									<h4><b>SHIFT</b></h4>
-								</div>
-							</div>
 						</div>
 					</div>
 					<div class="col-sm-4 col-xs-6">
 						<div class="card card-pricing card-raised">
+							<div class="card-header card-header-tabs" data-background-color="purple">
+								<h4><b>PLAN</b></h4>
+							</div>
 							<div class="content">
 								<h3 class="card-title"><?= ($schedule->sch_actual) ? $schedule->sch_actual : 0 ?></h3>
 							</div>
-							<div class="card-footer ">
-								<div class="text-center">
-									<h4><b>PLAN</b></h4>
-								</div>
-							</div>
 						</div>
 					</div>
 					<div class="col-sm-4 col-xs-6">
 						<div class="card card-pricing card-raised">
+							<div class="card-header card-header-tabs" data-background-color="purple">
+								<h4><b>ACTUAL</b></h4>
+							</div>
 							<div class="content">
 								<h3 class="card-title"><?= ($schedule->sch_reject) ? $schedule->sch_reject : 0 ?></h3>
-							</div>
-							<div class="card-footer ">
-								<div class="text-center">
-									<h4><b>ACTUAL</b></h4>
-								</div>
 							</div>
 						</div>
 					</div>
@@ -77,7 +71,7 @@
 												</div>
 												<div class="row">
 													<div style="text-align: center;">
-														<img src="<?= base_url('assets/img/kmwi_assi_line.png') ?>"
+														<img src="<?= base_url('assets/img/kmwi_asse_line.png') ?>"
 															 style="transform: scale(1); max-width: 100%;width: auto;max-height:600px;"
 															 alt="Responsive image">
 													</div>
@@ -92,16 +86,14 @@
 
 						<div class="col-sm-3 col-xs-6">
 							<div class="card card-pricing card-raised">
-								<div class="content">
+								<div class="card-header card-header-tabs" data-background-color="rose">
 									<h3 class="card-title"><?= $production->sta_name ?></h3>
 									<small><?= '(' . $production->sta_type . ')' ?></small>
 								</div>
-								<div class="card-footer ">
-									<div class="text-center">
-										<h4>
-											<b><?= (!$production->prd_counting_cycle) ? '00:00:00' : gmdate("H:i:s", $production->prd_counting_cycle); ?></b>
-										</h4>
-									</div>
+								<div class="content">
+									<h4>
+										<b><?= (!$production->prd_counting_cycle) ? '00:00:00' : gmdate("H:i:s", $production->prd_counting_cycle); ?></b>
+									</h4>
 								</div>
 							</div>
 						</div>

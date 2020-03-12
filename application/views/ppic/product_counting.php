@@ -12,6 +12,7 @@
 			?>
 
 			<div class="row">
+
 				<div class="col-md-12">
 					<div class="col-sm-3 col-xs-6">
 						<div class="card card-pricing card-raised">
