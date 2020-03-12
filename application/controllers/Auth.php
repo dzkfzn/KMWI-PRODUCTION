@@ -36,6 +36,22 @@ class Auth extends BaseController
 
 		} elseif ($this->ion_auth->is_operator()) {
 			$this->global['gPageTitle'] = 'Operator | Dashboard';
+
+			$sch = $this->Master_model->any_select($this->sp_detail, $this->tbl_schedule . $this->desc_today . 'Dashboard', FALSE, FALSE, TRUE);
+			$id = NULL;
+			if ($sch)
+				$id = $sch->sch_id;
+
+			$this->data['productions'] = $this->Master_model->any_select($this->sp_list, $this->tbl_production, array($id), TRUE);
+			$this->data['schedule'] = $this->Master_model->any_select($this->sp_detail, $this->tbl_schedule, array($id));
+			$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+			$this->data['form_attribute'] = array(
+				'id' => 'FormValidation',
+				'class' => 'form-horizontal'
+			);
+//			$this->set_global('PPIC | Dashboard', 'Dashboard', 'Currently Working Schedule');
+
 			$this->loadViews("operator/dashboard", $this->global, $this->data, NULL);
 
 

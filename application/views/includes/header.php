@@ -308,6 +308,18 @@
 				<?php endif ?>
 				<!--				End of if PPIC-->
 
+
+				<!--				Begin of If Operator -->
+				<?php if ($this->ion_auth->is_operator()): ?>
+					<li <?php if ($uri === "dashboard" || $uri == "") echo 'class="active"'; ?> >
+						<a href="<?= base_url('production/dashboard') ?>">
+							<i class="material-icons">dashboard</i>
+							<p> Dashboard </p>
+						</a>
+					</li>
+				<?php endif ?>
+				<!--				End of if Operator-->
+
 			</ul>
 		</div>
 	</div>
